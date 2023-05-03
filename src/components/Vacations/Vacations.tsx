@@ -12,12 +12,12 @@ const Vacations: React.FC<VacationsProps> = ({ vacations }) => {
     return <h3>Подождите идет загрузка</h3>
   }
   if (!vacations.length) {
-    return <h3>В данной команде еще нет участников</h3>
+    return <h3>В данной команде еще не выбрали отпуска</h3>
   }
 
   return (
     <React.Fragment>
-      <h3>Список участников</h3>
+      <h3>Список участников с выбранными отпусками</h3>
       {vacations.map((vacation, index) => (
         <VacationsItem {...vacation} key={index}></VacationsItem>
       ))}

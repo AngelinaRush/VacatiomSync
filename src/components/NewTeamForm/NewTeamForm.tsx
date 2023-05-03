@@ -27,7 +27,7 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
     this.state = {
       title: '',
       email: '',
-      members: ['gfggh', 'bhjhjhj'],
+      members: [],
     }
   }
 
