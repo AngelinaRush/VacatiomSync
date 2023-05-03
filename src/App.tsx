@@ -1,22 +1,29 @@
-import React from 'react'
+import { Component } from 'react'
 
-import logo from './logo.svg'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+
+import HomePage from './pages/HomePage'
+import LoginPage from './pages/LoginPage'
+import NotFoundPage from './pages/NotFoundPage'
+
+import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
 
-function App() {
-  return (
-    <div className='App'>
-      <header className='App-header'>
-        <img src={logo} className='App-logo' alt='logo' />
-        <p>
-          <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a className='App-link' href='https://reactjs.org' target='_blank' rel='noopener noreferrer'>
-          Learn React
-        </a>
-      </header>
-    </div>
-  )
+type AppProps = {}
+type AppState = {}
+
+class App extends Component<AppProps, AppState> {
+  render() {
+    return (
+      <Router>
+        <Routes>
+          <Route path='/login' element={<LoginPage />} />
+          <Route path='/*' element={<HomePage />} />
+          <Route Component={NotFoundPage} />
+        </Routes>
+      </Router>
+    )
+  }
 }
 
 export default App

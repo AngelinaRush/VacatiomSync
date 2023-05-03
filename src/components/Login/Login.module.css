@@ -1,0 +1,24 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+form {
+  max-width: 500px;
+}
+
+label {
+  margin-bottom: 10px;
+}
+
+.buttons {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.buttons button {
+  margin-right: 0.5rem;
+}

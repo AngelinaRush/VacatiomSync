@@ -1,0 +1,7 @@
+.item {
+  height: 50px;
+  padding: 20px;
+  border-bottom: 1px solid #303338;
+  display: flex;
+  align-items: center;
+}

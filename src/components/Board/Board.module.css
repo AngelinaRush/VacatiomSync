@@ -1,0 +1,27 @@
+.board {
+  width: 345px;
+  position: fixed;
+  top: 64px;
+  left: 0;
+  z-index: 2000;
+  height: 100vh;
+  box-shadow: 1px 2px 15px 0 rgba(0, 0, 0, 0.15);
+  background-color: #282c34;
+  color: white;
+  overflow: auto;
+}
+
+.heading {
+  padding: 20px;
+}
+
+.addTeam {
+  height: 50px;
+  border-bottom: 1px solid #303338;
+  display: flex;
+  align-items: center;
+}
+
+.link {
+  text-decoration: none;
+}
