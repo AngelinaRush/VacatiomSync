@@ -9,6 +9,7 @@ import ListGroup from 'react-bootstrap/ListGroup'
 import styles from './NewTeamForm.module.css'
 
 import { Team } from '../../types'
+import { fieldIsEmpty, validateEmail } from '../../utils/validators'
 
 type NewTeamFormProps = {
   handleSubmit?: (newTeam: Team) => void
@@ -18,6 +19,7 @@ type NewTeamFormState = {
   title: string
   email: string
   members: string[]
+  validated: boolean
 }
 
 export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTeamFormState> {
@@ -28,15 +30,22 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
       title: '',
       email: '',
       members: [],
+      validated: false,
     }
   }
 
   handleSubmit = (evt: any) => {
     if (!this.props.handleSubmit) {
+      this.setState({ validated: true })
       return
     }
 
     evt.preventDefault()
+
+    if (fieldIsEmpty(this.state.title) || fieldIsEmpty(this.state.members)) {
+      this.setState({ validated: true })
+      return
+    }
 
     const newTeam = {
       id: +Date.now(),
@@ -49,6 +58,7 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
       title: '',
       email: '',
       members: [],
+      validated: false,
     })
   }
 
@@ -65,21 +75,28 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
   }
 
   handleAddMember = () => {
+    if (!validateEmail(this.state.email)) {
+      this.setState({ validated: true })
+      return
+    }
+
     this.setState({
       email: '',
       members: [...this.state.members, this.state.email],
+      validated: false,
     })
   }
   render() {
     const members = this.state.members
+    const { validated } = this.state
 
-    console.log(members)
     return (
-      <form onSubmit={this.handleSubmit}>
+      <Form noValidate validated={validated} onSubmit={this.handleSubmit}>
         <h2>Создание команды</h2>
         <InputGroup className='mb-3'>
           <InputGroup.Text id='title'>Название команды</InputGroup.Text>
           <Form.Control
+            required
             type='text'
             placeholder='Название команды'
             value={this.state.title}
@@ -87,10 +104,12 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
             aria-label='title'
             aria-describedby='title'
           />
+          <Form.Control.Feedback type='invalid'>Введите название команды</Form.Control.Feedback>
         </InputGroup>
         <InputGroup className='mb-3'>
           <InputGroup.Text id='email'>E-mail</InputGroup.Text>
           <Form.Control
+            required
             type='email'
             placeholder='Электронная почта'
             value={this.state.email}
@@ -98,6 +117,9 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
             aria-label='email'
             aria-describedby='email'
           />
+          <Form.Control.Feedback type='invalid'>
+            Адрес электронной почты должен содержать символ '@'
+          </Form.Control.Feedback>
           <Button type='button' onClick={this.handleAddMember}>
             Добавить участника
           </Button>
@@ -123,7 +145,7 @@ export default class NewTeamForm extends React.Component<NewTeamFormProps, NewTe
         <Button type='submit' onClick={this.handleSubmit}>
           Создать
         </Button>
-      </form>
+      </Form>
     )
   }
 }

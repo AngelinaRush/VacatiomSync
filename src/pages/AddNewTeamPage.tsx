@@ -17,7 +17,7 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = (props) => {
 }
 const mapStateToProps = (state: any) => ({ teams: state.teams })
 const mapDispatchToProps = (dispatch: any) => ({
-  addTeam: (newTeam: any) => dispatch(actions.addTeamAction(newTeam)),
+  addTeam: (newTeam: any) => dispatch(actions.addTeam(newTeam)),
 })
 
 export { AddNewTeamPage }

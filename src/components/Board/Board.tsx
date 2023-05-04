@@ -22,7 +22,9 @@ const Board: React.FC<BoardProps> = ({ teams }) => {
 
       {teams.map((team) => (
         <NavLink className={styles.link} to={`/team/${team.id}`}>
-          <BoardItem key={team.id}>{team.title}</BoardItem>
+          <BoardItem id={team.id} key={team.id}>
+            {team.title}
+          </BoardItem>
         </NavLink>
       ))}
 

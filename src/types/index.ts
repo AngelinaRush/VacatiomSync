@@ -5,15 +5,7 @@ export type Team = {
   members?: string[]
 }
 
-export type Member = {
-  name: string
-  id: number
-  role?: string
-}
-
-export type Vacation = {
-  id: number
+export type MemberVacations = {
   member: string
-  start: number
-  end: number
+  vacations: [{ id: number; start: number; end: number }]
 }

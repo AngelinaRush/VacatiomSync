@@ -1,8 +1,8 @@
 import { LOAD_VACATIONS, LOAD_VACATIONS_FAILURE, LOAD_VACATIONS_SUCCESS } from './actions'
 
-import { Vacation } from '../../types'
+import { MemberVacations } from '../../types'
 
-type VacationState = Vacation[]
+type VacationState = MemberVacations[]
 
 const vacations = (state: VacationState = [], actions: any) => {
   switch (actions.type) {

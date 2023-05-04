@@ -1,9 +1,15 @@
-import { getTeams } from '../../services/teams'
+import * as teamService from '../../services/teams'
+import { Team } from '../../types'
 
 export const LOAD_TEAMS = 'LOAD_TEAMS'
 export const LOAD_TEAMS_FAILURE = 'LOAD_TEAMS_FAILURE'
 export const LOAD_TEAMS_SUCCESS = 'LOAD_TEAMS_SUCCESS'
 export const ADD_TEAM = 'ADD_TEAM'
+export const ADD_TEAM_SUCCESS = 'ADD_TEAM_SUCCESS'
+export const ADD_TEAM_FAILURE = 'ADD_TEAM_FAILURE'
+export const REMOVE_TEAM = 'REMOVE_TEAM'
+export const REMOVE_TEAM_SUCCESS = 'REMOVE_TEAM_SUCCESS'
+export const REMOVE_TEAM_FAILURE = 'REMOVE_TEAM_FAILURE'
 
 export const loadTeamsAction = () => ({
   type: LOAD_TEAMS,
@@ -18,16 +24,56 @@ export const loadTeamsSuccessAction = (payload: any) => ({
   payload,
 })
 
-export const addTeamAction = (payload: any) => ({
-  type: ADD_TEAM,
+export const addTeamSuccessAction = (payload: Team) => ({
+  type: ADD_TEAM_SUCCESS,
   payload,
 })
+
+export const addTeamFailureAction = () => ({
+  type: ADD_TEAM_FAILURE,
+})
+
+export const removeTeamSuccessAction = (id: number) => ({
+  type: REMOVE_TEAM_SUCCESS,
+  id,
+})
+
+export const removeTeamFailureAction = () => ({
+  type: REMOVE_TEAM_FAILURE,
+})
+
+export const removeTeam = (id: number) => {
+  return (dispatch: any) => {
+    teamService
+      .removeTeam(id)
+      .then(() => {
+        dispatch(removeTeamSuccessAction(id))
+      })
+      .catch(() => {
+        removeTeamFailureAction()
+      })
+  }
+}
+
+export const addTeam = (newTeam: Team) => {
+  return (dispatch: any) => {
+    teamService
+      .addTeam(newTeam)
+      .then(() => {
+        dispatch(addTeamSuccessAction(newTeam))
+      })
+      .catch(() => {
+        dispatch(addTeamFailureAction())
+      })
+  }
+}
 
 export const loadTeams = () => {
   return (dispatch: any) => {
     dispatch(loadTeamsAction())
 
-    getTeams()
+    teamService
+      .getTeams()
       .then((data) => {
         dispatch(loadTeamsSuccessAction(data))
       })
