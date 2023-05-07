@@ -1,4 +1,6 @@
 import React from 'react'
+import Button from 'react-bootstrap/Button'
+import { connect } from 'react-redux'
 // @ts-ignore
 import Timeline from 'react-timelines'
 
@@ -8,30 +10,33 @@ import { buildTimebar } from './builders'
 
 import { START_YEAR, NUM_OF_YEARS } from './constants'
 
-import { MemberVacations } from '../../types'
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css'
+import 'react-calendar/dist/Calendar.css'
+import styles from './Vacations.module.css'
 
-const now = new Date('2023-05-03')
+import { addVacation } from '../../redux/vacations/actions'
 
+import { VacationState } from '../../redux/vacations/reducer'
+import { Vacation, DateRangeValue, Team } from '../../types'
+import AddVacationsModal from '../AddVacationModal/AddVacationModal'
+
+const now = new Date()
 const timebar = buildTimebar()
 
 const MIN_ZOOM = 2
 const MAX_ZOOM = 20
 
 type VacationsProps = {
-  members?: string[] | null
-  vacations: MemberVacations[] | null
+  team?: Team
+  vacations: VacationState
+  addVacation?: (vacation: Vacation) => void
 }
 
-const Vacations: React.FC<VacationsProps> = ({ members, vacations }) => {
-  if (!vacations) {
-    return <h3>Подождите идет загрузка</h3>
-  }
+const Vacations: React.FC<VacationsProps> = ({ team, vacations, addVacation }) => {
+  const [modalShow, setModalShow] = React.useState(false)
+  const [dateRange, setDateRange] = React.useState<DateRangeValue>([null, null])
 
-  if (!vacations.length) {
-    return <h3>В данной команде еще не выбрали отпуска</h3>
-  }
-
-  if (!members) {
+  if (!team?.members) {
     return null
   }
 
@@ -39,12 +44,13 @@ const Vacations: React.FC<VacationsProps> = ({ members, vacations }) => {
   const end = new Date(`${START_YEAR + NUM_OF_YEARS}`)
 
   const tracks = Object.values(
-    members.reduce((acc, member, index) => {
+    team.members.reduce((acc, member, index) => {
+      const memberVacations = vacations.data?.filter((vacation) => member === vacation.member)
       const track = {
         id: index,
         title: member,
         elements:
-          vacations[index].vacations?.map(({ id, start, end }) => ({
+          memberVacations?.map(({ id, start, end }) => ({
             id,
             title: 'Отпуск',
             start: new Date(start),
@@ -60,7 +66,31 @@ const Vacations: React.FC<VacationsProps> = ({ members, vacations }) => {
 
   return (
     <React.Fragment>
-      <h3>Список участников с выбранными отпусками</h3>
+      <div className={styles.title}>
+        <h3>{team.title}</h3>
+        <Button onClick={() => setModalShow(true)}>Добавить отпуск</Button>
+        <AddVacationsModal
+          dateRange={dateRange}
+          onChangeDateRange={setDateRange}
+          show={modalShow}
+          onHide={() => {
+            setModalShow(false)
+          }}
+          onSubmit={() => {
+            const [start, end] = dateRange
+            const newVacation: Vacation = {
+              id: +new Date(),
+              teamId: team.id,
+              member: 'Charlie@gmail.com',
+              start: +(start as Date),
+              end: +(end as Date),
+            }
+            addVacation && addVacation(newVacation)
+            setDateRange([null, null])
+            setModalShow(false)
+          }}
+        />
+      </div>
       <Timeline
         scale={{
           start,
@@ -79,4 +109,11 @@ const Vacations: React.FC<VacationsProps> = ({ members, vacations }) => {
   )
 }
 
-export default Vacations
+const mapStateToProps = () => ({})
+const mapDispatchToProps = (dispatch: any) => ({
+  addVacation: (newVacation: any) => dispatch(addVacation(newVacation)),
+})
+
+export { Vacations }
+
+export default connect(mapStateToProps, mapDispatchToProps)(Vacations)

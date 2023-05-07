@@ -5,7 +5,6 @@ export type Team = {
   members?: string[]
 }
 
-export type MemberVacations = {
-  member: string
-  vacations: [{ id: number; start: number; end: number }]
-}
+export type Vacation = { id: number; teamId: number; member: string; start: number; end: number }
+
+export type DateRangeValue = [Date | null, Date | null]

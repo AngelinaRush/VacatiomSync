@@ -2,9 +2,11 @@ import { Component } from 'react'
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
-import HomePage from './pages/HomePage'
+import withMenuHOC from './hoc/withMenu'
+import AddNewTeamPage from './pages/AddNewTeamPage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
+import VacationsPage from './pages/VacationsPage'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import './App.css'
@@ -18,7 +20,8 @@ class App extends Component<AppProps, AppState> {
       <Router>
         <Routes>
           <Route path='/login' element={<LoginPage />} />
-          <Route path='/*' element={<HomePage />} />
+          <Route path='/team/:teamId' element={withMenuHOC(<VacationsPage />)}></Route>
+          <Route path='/teams/add_team' element={withMenuHOC(<AddNewTeamPage />)}></Route>
           <Route Component={NotFoundPage} />
         </Routes>
       </Router>

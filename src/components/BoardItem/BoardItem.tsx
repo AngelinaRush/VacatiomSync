@@ -1,4 +1,4 @@
-import cn from 'classname'
+import cn from 'classnames'
 import React from 'react'
 import { CloseButton } from 'react-bootstrap'
 import { connect } from 'react-redux'
@@ -19,14 +19,17 @@ const BoardItem: React.FC<BoardItemProps> = ({ children, className = '', removeT
     <div className={cn(styles.item, className)}>
       <div className={styles.title}>{children}</div>
       {id && removeTeam && (
-        <CloseButton
-          variant='white'
-          onClick={(evt: any) => {
-            evt.preventDefault()
-            evt.stopPropagation()
-            removeTeam(id)
-          }}
-        />
+        <div>
+          <button type='button' className={cn(styles.editButton, styles.button)} />
+          <CloseButton
+            variant='white'
+            onClick={(evt: any) => {
+              evt.preventDefault()
+              evt.stopPropagation()
+              removeTeam(id)
+            }}
+          />
+        </div>
       )}
     </div>
   )

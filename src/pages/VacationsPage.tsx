@@ -3,12 +3,14 @@ import { connect } from 'react-redux'
 import { useParams } from 'react-router-dom'
 
 import Vacations from '../components/Vacations/Vacations'
+import { RootState } from '../redux/rootReducer'
+import { TeamsState } from '../redux/teams/reducer'
 import { loadVacations } from '../redux/vacations/actions'
-import { Team, MemberVacations } from '../types'
+import { VacationState } from '../redux/vacations/reducer'
 
 type VacationsPageProps = {
-  teams: Team[] | null
-  vacations: MemberVacations[] | null
+  teams: TeamsState
+  vacations: VacationState
   loadVacations: (id: number) => void
 }
 
@@ -16,15 +18,15 @@ const VacationsPage: React.FC<VacationsPageProps> = (props) => {
   const { teams, vacations, loadVacations } = props
 
   const { teamId } = useParams()
-  const team = teams?.find((item: any) => item.id === Number(teamId))
+  const team = teams.data?.find((item: any) => item.id === Number(teamId))
 
   useEffect(() => {
     loadVacations(Number(teamId))
   }, [teamId, loadVacations])
-  return <Vacations vacations={vacations} members={team?.members}></Vacations>
+  return <Vacations team={team} vacations={vacations}></Vacations>
 }
 
-const mapStateToProps = (state: any) => ({ vacations: state.vacations, teams: state.teams })
+const mapStateToProps = (state: RootState) => ({ vacations: state.vacations, teams: state.teams })
 const mapDispatchToProps = (dispatch: any) => ({
   loadVacations: (teamId: number) => dispatch(loadVacations(teamId)),
 })

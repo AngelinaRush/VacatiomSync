@@ -1,8 +1,7 @@
 import teams from '../mocks/teamsMock.json'
-import vacations from '../mocks/vacationsMock'
-import { Team, MemberVacations } from '../types'
+import { Team } from '../types'
 
-const promiseResponse = (data: Team[] | MemberVacations[] | object) =>
+const promiseResponse = (data: Team[] | object) =>
   new Promise((resolve) => {
     setTimeout(() => {
       resolve(data)
@@ -16,8 +15,3 @@ export const addTeam = (_newTeam: Team) => {
 }
 
 export const removeTeam = (_id: number) => promiseResponse({})
-
-export const getVacations = (teamId: number) => {
-  const teamVacations = (vacations as unknown as Record<number, MemberVacations[]>)[teamId] || []
-  return promiseResponse(teamVacations)
-}
