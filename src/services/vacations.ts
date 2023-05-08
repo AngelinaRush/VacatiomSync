@@ -1,5 +1,5 @@
 import vacations from '../mocks/vacationsMock'
-import { Vacation } from '../types'
+import { Vacation, Team } from '../types'
 
 const promiseResponse = (data: Vacation[] | object) =>
   new Promise((resolve) => {
@@ -8,9 +8,13 @@ const promiseResponse = (data: Vacation[] | object) =>
     }, 500)
   })
 
-export const getVacations = (teamId: number) => {
-  const teamVacations = (vacations as Vacation[]).filter((vacation) => vacation.teamId === teamId)
-  return promiseResponse(teamVacations)
+export const getVacations = (teams: Team[]) => {
+  const allVacations = teams.reduce<Vacation[]>((acc, team) => {
+    const filterVacation = vacations.filter((vacation) => team.members.includes(vacation.member))
+    return acc.concat(filterVacation)
+  }, [])
+
+  return promiseResponse(allVacations)
 }
 
 export const addVacation = (_newVacations: Vacation) => {

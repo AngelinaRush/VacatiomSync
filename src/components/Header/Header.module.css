@@ -5,18 +5,31 @@
 
   height: 64px;
   padding: 0px 20px;
-  z-index: 2000;
-  position: fixed;
-  top: 0;
-  right: 0;
-  left: 0;
 
   box-shadow: 1px 2px 15px 0 rgba(0, 0, 0, 0.15);
   background-color: #282c34;
 }
 
-
 .logo {
+  text-decoration: none;
   color: white;
-  box-sizing: Boarder-box;
+  cursor: pointer;
+}
+
+.logo:hover {
+  color: white;
+}
+
+.menu {
+  margin-left: 60px;
+}
+
+.menuItem {
+  text-decoration: none;
+  color: white;
+  margin-right: 20px;
+}
+
+.left {
+  display: flex;
 }

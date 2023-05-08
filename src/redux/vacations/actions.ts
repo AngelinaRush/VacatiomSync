@@ -1,5 +1,5 @@
 import * as vacationService from '../../services/vacations'
-import { Vacation } from '../../types'
+import { Vacation, Team } from '../../types'
 
 export const LOAD_VACATIONS = 'LOAD_VACATIONS'
 export const LOAD_VACATIONS_FAILURE = 'LOAD_VACATIONS_FAILURE'
@@ -46,12 +46,12 @@ export const addVacation = (newVacation: Vacation) => {
   }
 }
 
-export const loadVacations = (teamId: number) => {
+export const loadVacations = (teams: Team[]) => {
   return (dispatch: any) => {
     dispatch(loadVacationsAction())
 
     vacationService
-      .getVacations(teamId)
+      .getVacations(teams)
       .then((value) => {
         dispatch(loadVacationsSuccessAction(value))
       })

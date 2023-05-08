@@ -1,29 +1,29 @@
-import React, { useState } from 'react'
+import React, { Dispatch, useState } from 'react'
 
 import Button from 'react-bootstrap/Button'
 import CloseButton from 'react-bootstrap/CloseButton'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import ListGroup from 'react-bootstrap/ListGroup'
-import { connect } from 'react-redux'
+
+import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import styles from './AddNewTeamPage.module.css'
 
-import * as actions from '../redux/teams/actions'
-import { Team } from '../types'
+import { addTeam } from '../redux/teams/actions'
 import { fieldIsEmpty, validateEmail } from '../utils/validators'
 
-type AddNewTeamPageProps = {
-  addTeam: (newTeam: Team) => void
-}
+type AddNewTeamPageProps = {}
 
-const AddNewTeamPage: React.FC<AddNewTeamPageProps> = (props) => {
+const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
   const [title, setTitle] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [members, setMembers] = useState<string[]>([])
   const [validated, setValidated] = useState<boolean>(false)
+  const navigate = useNavigate()
 
-  const { addTeam } = props
+  const dispatch: Dispatch<any> = useDispatch()
 
   const handleSubmit = (evt: any) => {
     evt.preventDefault()
@@ -37,13 +37,16 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = (props) => {
       id: +Date.now(),
       title: title,
       members: members,
+      responsible: '',
     }
 
-    addTeam(newTeam)
+    addTeam(newTeam)(dispatch)
     setTitle('')
     setEmail('')
     setMembers([])
     setValidated(false)
+
+    navigate('/vacations')
   }
 
   const handleTitleChange = (evt: any) => {
@@ -120,8 +123,8 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = (props) => {
   )
 
   return (
-    <Form noValidate validated={validated} onSubmit={handleSubmit}>
-      <h2>Создание команды</h2>
+    <Form className={styles.form} noValidate validated={validated} onSubmit={handleSubmit}>
+      <h2 className={styles.title}>Создание команды</h2>
       {renderTeamNameInput()}
       {renderEmailInput()}
       {renderMembersList()}
@@ -131,11 +134,5 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = (props) => {
     </Form>
   )
 }
-const mapStateToProps = (state: any) => ({ teams: state.teams })
-const mapDispatchToProps = (dispatch: any) => ({
-  addTeam: (newTeam: any) => dispatch(actions.addTeam(newTeam)),
-})
 
-export { AddNewTeamPage }
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewTeamPage)
+export default AddNewTeamPage

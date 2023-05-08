@@ -9,6 +9,6 @@
     "id": 2,
     "title": "Team B",
     "responsible": "Jane Smith",
-    "members": ["David@gmail.com", "Eve@gmail.com"]
+    "members": ["David@gmail.com", "Eve@gmail.com", "Charlie@gmail.com"]
   }
 ]

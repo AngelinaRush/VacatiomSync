@@ -22,3 +22,8 @@ label {
 .buttons button {
   margin-right: 0.5rem;
 }
+
+.error {
+  color: red;
+  margin-top: 1rem;
+}
