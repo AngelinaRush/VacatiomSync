@@ -25,6 +25,7 @@ const App: React.FC<AppProps> = () => {
   return (
     <Router>
       <Routes>
+        <Route path='/' element={<Navigate to='/vacations' replace />} />
         <Route path='/login' element={<LoginPage />} />
 
         <Route path='/vacations' element={withHandleUser(withMenuHOC(<VacationsPage />))} />
