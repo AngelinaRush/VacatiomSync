@@ -44,7 +44,7 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
 
   useEffect(() => {
     const newTracksById = teams.reduce((acc, team) => {
-      const teamVacations = vacations.filter((vacation: Vacation) => team.members.includes(vacation.member))
+      const teamVacations = vacations.filter((vacation: Vacation) => team.members?.includes(vacation.member))
 
       const track = {
         id: team.id,
@@ -56,7 +56,7 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
           end: new Date(end),
         })),
         isOpen: true,
-        tracks: team.members.map((member) => {
+        tracks: team.members?.map((member) => {
           const memberVacations = teamVacations.filter((vacation) => member === vacation.member)
 
           return {

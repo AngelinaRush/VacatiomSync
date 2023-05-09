@@ -19,6 +19,7 @@ export type TeamsState = {
   data: Team[]
   loading: boolean
   error: string
+  newTeamId?: string
 }
 
 const defaultState = {
@@ -55,7 +56,7 @@ const teams = (state: TeamsState = defaultState, action: any) => {
     case ADD_TEAM_SUCCESS:
       return {
         ...state,
-        data: [...state.data, action.payload],
+        newTeamId: action.payload,
       }
     case REMOVE_TEAM:
     case REMOVE_TEAM_FAILURE:

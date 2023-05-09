@@ -1,4 +1,4 @@
-import React, { Dispatch, useState } from 'react'
+import React, { Dispatch, useEffect, useState } from 'react'
 
 import Button from 'react-bootstrap/Button'
 import CloseButton from 'react-bootstrap/CloseButton'
@@ -6,47 +6,52 @@ import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import ListGroup from 'react-bootstrap/ListGroup'
 
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
 import styles from './AddNewTeamPage.module.css'
 
+import { RootState } from '../redux/rootReducer'
 import { addTeam } from '../redux/teams/actions'
 import { fieldIsEmpty, validateEmail } from '../utils/validators'
 
 type AddNewTeamPageProps = {}
 
 const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
+  const { newTeamId } = useSelector((state: RootState) => state.teams)
+
   const [title, setTitle] = useState<string>('')
   const [email, setEmail] = useState<string>('')
-  const [members, setMembers] = useState<string[]>([])
+  const [invites, setInvites] = useState<string[]>([])
   const [validated, setValidated] = useState<boolean>(false)
   const navigate = useNavigate()
 
   const dispatch: Dispatch<any> = useDispatch()
 
+  useEffect(() => {
+    if (newTeamId) {
+      navigate(`/team/${newTeamId}`)
+    }
+  }, [newTeamId, navigate])
+
   const handleSubmit = (evt: any) => {
     evt.preventDefault()
 
-    if (fieldIsEmpty(title) || fieldIsEmpty(members)) {
+    if (fieldIsEmpty(title) || fieldIsEmpty(invites)) {
       setValidated(true)
       return
     }
 
     const newTeam = {
-      id: +Date.now(),
       title: title,
-      members: members,
-      responsible: '',
+      invites,
     }
 
     addTeam(newTeam)(dispatch)
     setTitle('')
     setEmail('')
-    setMembers([])
+    setInvites([])
     setValidated(false)
-
-    navigate('/vacations')
   }
 
   const handleTitleChange = (evt: any) => {
@@ -57,14 +62,14 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
     setEmail(evt.target.value)
   }
 
-  const handleAddMember = () => {
+  const handleAddInvite = () => {
     if (!validateEmail(email)) {
       setValidated(true)
       return
     }
 
     setEmail('')
-    setMembers([...members, email])
+    setInvites([...invites, email])
     setValidated(false)
   }
 
@@ -97,23 +102,23 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
         aria-describedby='email'
       />
       <Form.Control.Feedback type='invalid'>Адрес электронной почты должен содержать символ '@'</Form.Control.Feedback>
-      <Button type='button' onClick={handleAddMember}>
+      <Button type='button' onClick={handleAddInvite}>
         Добавить участника
       </Button>
     </InputGroup>
   )
 
-  const renderMembersList = () => (
+  const renderInvitesList = () => (
     <ListGroup className='mb-3'>
-      {members.map((member, index) => (
-        <ListGroup.Item key={member}>
+      {invites.map((invite, index) => (
+        <ListGroup.Item key={invite}>
           <div className={styles.listItem}>
-            {member}
+            {invite}
             <CloseButton
               onClick={() => {
-                const newMembers = [...members]
-                newMembers.splice(index, 1)
-                setMembers(newMembers)
+                const newInvites = [...invites]
+                newInvites.splice(index, 1)
+                setInvites(newInvites)
               }}
             />
           </div>
@@ -127,7 +132,7 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
       <h2 className={styles.title}>Создание команды</h2>
       {renderTeamNameInput()}
       {renderEmailInput()}
-      {renderMembersList()}
+      {renderInvitesList()}
       <Button type='submit' onClick={handleSubmit}>
         Создать
       </Button>

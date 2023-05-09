@@ -13,10 +13,25 @@ type BoardProps = {}
 
 const Board: React.FC<BoardProps> = () => {
   const teams = useSelector((state: RootState) => state.teams)
+  const team = useSelector((state: RootState) => state.team)
+
   const dispatch: Dispatch<any> = useDispatch()
+
   useEffect(() => {
     dispatch(actions.loadTeams())
   }, [dispatch])
+
+  useEffect(() => {
+    if (teams.newTeamId) {
+      dispatch(actions.loadTeams())
+    }
+  }, [dispatch, teams.newTeamId])
+
+  useEffect(() => {
+    if (!team.hasInvite) {
+      dispatch(actions.loadTeams())
+    }
+  }, [dispatch, team.hasInvite])
 
   if (teams.loading) {
     return <h3>Подождите идет загрузка</h3>
@@ -28,7 +43,7 @@ const Board: React.FC<BoardProps> = () => {
 
       {teams.data.map((team) => (
         <NavLink className={styles.link} to={`/team/${team.id}`}>
-          <BoardItem id={team.id} key={team.id}>
+          <BoardItem team={team} key={team.id}>
             {team.title}
           </BoardItem>
         </NavLink>

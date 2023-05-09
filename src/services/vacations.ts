@@ -10,7 +10,7 @@ const promiseResponse = (data: Vacation[] | object) =>
 
 export const getVacations = (teams: Team[]) => {
   const allVacations = teams.reduce<Vacation[]>((acc, team) => {
-    const filterVacation = vacations.filter((vacation) => team.members.includes(vacation.member))
+    const filterVacation = vacations.filter((vacation) => team.members?.includes(vacation.member))
     return acc.concat(filterVacation)
   }, [])
 
