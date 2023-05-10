@@ -1,0 +1,12 @@
+.listItem {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.form {
+  margin-left: 400px;
+}

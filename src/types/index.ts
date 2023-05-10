@@ -1,11 +1,16 @@
 export type Team = {
   title: string
-  id: number
-  responsible?: string
-  members?: string[]
+  id: string
+  responsible: string
+  members: string[]
+  invites: string[]
 }
 
-export type MemberVacations = {
-  member: string
-  vacations: [{ id: number; start: number; end: number }]
+export type NewTeam = {
+  title: string
+  invites: string[]
 }
+
+export type Vacation = { id: number; member: string; start: number; end: number }
+
+export type DateRangeValue = [Date | null, Date | null]

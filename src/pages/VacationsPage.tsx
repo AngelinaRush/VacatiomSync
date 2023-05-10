@@ -1,32 +1,68 @@
-import React, { useEffect } from 'react'
-import { connect } from 'react-redux'
-import { useParams } from 'react-router-dom'
+import React, { Dispatch, useEffect } from 'react'
+import Button from 'react-bootstrap/Button'
+import { useSelector, useDispatch } from 'react-redux'
 
+import styles from './VacationsPage.module.css'
+
+import AddVacationsModal from '../components/AddVacationModal/AddVacationModal'
 import Vacations from '../components/Vacations/Vacations'
+import { RootState } from '../redux/rootReducer'
+import { loadTeams } from '../redux/teams/actions'
 import { loadVacations } from '../redux/vacations/actions'
-import { Team, MemberVacations } from '../types'
+import { addVacation } from '../redux/vacations/actions'
 
-type VacationsPageProps = {
-  teams: Team[] | null
-  vacations: MemberVacations[] | null
-  loadVacations: (id: number) => void
-}
+import { Vacation, DateRangeValue } from '../types'
 
-const VacationsPage: React.FC<VacationsPageProps> = (props) => {
-  const { teams, vacations, loadVacations } = props
+type TeamsPageProps = {}
 
-  const { teamId } = useParams()
-  const team = teams?.find((item: any) => item.id === Number(teamId))
+const TeamsPage: React.FC<TeamsPageProps> = () => {
+  const teams = useSelector((state: RootState) => state.teams)
+  const vacations = useSelector((state: RootState) => state.vacations)
+  const dispatch: Dispatch<any> = useDispatch()
 
   useEffect(() => {
-    loadVacations(Number(teamId))
-  }, [teamId, loadVacations])
-  return <Vacations vacations={vacations} members={team?.members}></Vacations>
+    loadTeams()(dispatch)
+  }, [dispatch])
+
+  useEffect(() => {
+    loadVacations(teams.data)(dispatch)
+  }, [dispatch, teams])
+
+  const [modalShow, setModalShow] = React.useState(false)
+  const [dateRange, setDateRange] = React.useState<DateRangeValue>([null, null])
+
+  return (
+    <React.Fragment>
+      <div className={styles.AddVacationButton}>
+        <Button onClick={() => setModalShow(true)}>Добавить отпуск</Button>
+      </div>
+      <AddVacationsModal
+        dateRange={dateRange}
+        onChangeDateRange={setDateRange}
+        show={modalShow}
+        onHide={() => {
+          setModalShow(false)
+        }}
+        onSubmit={() => {
+          const [start, end] = dateRange
+          const newVacation: Vacation = {
+            id: +new Date(),
+            member: 'Charlie@gmail.com',
+            start: +(start as Date),
+            end: +(end as Date),
+          }
+          addVacation(newVacation)(dispatch)
+          setDateRange([null, null])
+          setModalShow(false)
+        }}
+      />
+      <Vacations teams={teams.data} vacations={vacations.data}></Vacations>
+      {/* {teams.data.map((team) => {
+        const teamVacations = vacations.data.filter((vacation: Vacation) => team.members.includes(vacation.member))
+        return <Vacations team={team} vacations={teamVacations}></Vacations>
+      })} */}
+    </React.Fragment>
+  )
 }
 
-const mapStateToProps = (state: any) => ({ vacations: state.vacations, teams: state.teams })
-const mapDispatchToProps = (dispatch: any) => ({
-  loadVacations: (teamId: number) => dispatch(loadVacations(teamId)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(VacationsPage)
+export default TeamsPage

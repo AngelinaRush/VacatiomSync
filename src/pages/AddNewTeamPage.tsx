@@ -1,25 +1,143 @@
-import React from 'react'
-import { connect } from 'react-redux'
+import React, { Dispatch, useEffect, useState } from 'react'
 
-import NewTeamForm from '../components/NewTeamForm/NewTeamForm'
-import * as actions from '../redux/teams/actions'
-import { Team } from '../types'
+import Button from 'react-bootstrap/Button'
+import CloseButton from 'react-bootstrap/CloseButton'
+import Form from 'react-bootstrap/Form'
+import InputGroup from 'react-bootstrap/InputGroup'
+import ListGroup from 'react-bootstrap/ListGroup'
 
-type AddNewTeamPageProps = {
-  addTeam: (newTeam: Team) => void
+import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+
+import styles from './AddNewTeamPage.module.css'
+
+import { RootState } from '../redux/rootReducer'
+import { addTeam } from '../redux/teams/actions'
+import { fieldIsEmpty, validateEmail } from '../utils/validators'
+
+type AddNewTeamPageProps = {}
+
+const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
+  const { newTeamId } = useSelector((state: RootState) => state.teams)
+
+  const [title, setTitle] = useState<string>('')
+  const [email, setEmail] = useState<string>('')
+  const [invites, setInvites] = useState<string[]>([])
+  const [validated, setValidated] = useState<boolean>(false)
+  const navigate = useNavigate()
+
+  const dispatch: Dispatch<any> = useDispatch()
+
+  useEffect(() => {
+    if (newTeamId) {
+      navigate(`/team/${newTeamId}`)
+    }
+  }, [newTeamId, navigate])
+
+  const handleSubmit = (evt: any) => {
+    evt.preventDefault()
+
+    if (fieldIsEmpty(title) || fieldIsEmpty(invites)) {
+      setValidated(true)
+      return
+    }
+
+    const newTeam = {
+      title: title,
+      invites,
+    }
+
+    addTeam(newTeam)(dispatch)
+    setTitle('')
+    setEmail('')
+    setInvites([])
+    setValidated(false)
+  }
+
+  const handleTitleChange = (evt: any) => {
+    setTitle(evt.target.value)
+  }
+
+  const handleEmailChange = (evt: any) => {
+    setEmail(evt.target.value)
+  }
+
+  const handleAddInvite = () => {
+    if (!validateEmail(email)) {
+      setValidated(true)
+      return
+    }
+
+    setEmail('')
+    setInvites([...invites, email])
+    setValidated(false)
+  }
+
+  const renderTeamNameInput = () => (
+    <InputGroup className='mb-3'>
+      <InputGroup.Text id='title'>Название команды</InputGroup.Text>
+      <Form.Control
+        required
+        type='text'
+        placeholder='Название команды'
+        value={title}
+        onChange={handleTitleChange}
+        aria-label='title'
+        aria-describedby='title'
+      />
+      <Form.Control.Feedback type='invalid'>Введите название команды</Form.Control.Feedback>
+    </InputGroup>
+  )
+
+  const renderEmailInput = () => (
+    <InputGroup className='mb-3'>
+      <InputGroup.Text id='email'>E-mail</InputGroup.Text>
+      <Form.Control
+        required
+        type='email'
+        placeholder='Электронная почта'
+        value={email}
+        onChange={handleEmailChange}
+        aria-label='email'
+        aria-describedby='email'
+      />
+      <Form.Control.Feedback type='invalid'>Адрес электронной почты должен содержать символ '@'</Form.Control.Feedback>
+      <Button type='button' onClick={handleAddInvite}>
+        Добавить участника
+      </Button>
+    </InputGroup>
+  )
+
+  const renderInvitesList = () => (
+    <ListGroup className='mb-3'>
+      {invites.map((invite, index) => (
+        <ListGroup.Item key={invite}>
+          <div className={styles.listItem}>
+            {invite}
+            <CloseButton
+              onClick={() => {
+                const newInvites = [...invites]
+                newInvites.splice(index, 1)
+                setInvites(newInvites)
+              }}
+            />
+          </div>
+        </ListGroup.Item>
+      ))}
+    </ListGroup>
+  )
+
+  return (
+    <Form className={styles.form} noValidate validated={validated} onSubmit={handleSubmit}>
+      <h2 className={styles.title}>Создание команды</h2>
+      {renderTeamNameInput()}
+      {renderEmailInput()}
+      {renderInvitesList()}
+      <Button type='submit' onClick={handleSubmit}>
+        Создать
+      </Button>
+    </Form>
+  )
 }
-const AddNewTeamPage: React.FC<AddNewTeamPageProps> = (props) => {
-  const { addTeam } = props
 
-  const handleSubmit = (newTeam: Team) => addTeam(newTeam)
-
-  return <NewTeamForm handleSubmit={handleSubmit} />
-}
-const mapStateToProps = (state: any) => ({ teams: state.teams })
-const mapDispatchToProps = (dispatch: any) => ({
-  addTeam: (newTeam: any) => dispatch(actions.addTeam(newTeam)),
-})
-
-export { AddNewTeamPage }
-
-export default connect(mapStateToProps, mapDispatchToProps)(AddNewTeamPage)
+export default AddNewTeamPage

@@ -2,6 +2,9 @@ import {
   LOAD_TEAMS,
   LOAD_TEAMS_FAILURE,
   LOAD_TEAMS_SUCCESS,
+  // EDIT_TEAMS,
+  // EDIT_TEAMS_FAILURE,
+  // EDIT_TEAMS_SUCCESS,
   ADD_TEAM,
   ADD_TEAM_FAILURE,
   ADD_TEAM_SUCCESS,
@@ -12,33 +15,61 @@ import {
 
 import { Team } from '../../types'
 
-type TeamsState = Team[]
+export type TeamsState = {
+  data: Team[]
+  loading: boolean
+  error: string
+  newTeamId?: string
+}
 
-const teams = (state: TeamsState = [], action: any) => {
+const defaultState = {
+  loading: false,
+  data: [],
+  error: '',
+}
+
+const teams = (state: TeamsState = defaultState, action: any) => {
   switch (action.type) {
     case LOAD_TEAMS:
-      return null
+      return {
+        loading: true,
+        data: [],
+        error: '',
+      }
     case LOAD_TEAMS_FAILURE:
-      return null
+      return {
+        loading: false,
+        data: [],
+        error: '',
+      }
     case LOAD_TEAMS_SUCCESS:
-      return action.payload
+      return {
+        loading: false,
+        data: action.payload,
+        error: '',
+      }
+    // case EDIT_TEAMS:
+    //   return {}
     case ADD_TEAM:
     case ADD_TEAM_FAILURE:
       return state
     case ADD_TEAM_SUCCESS:
-      return [...state, action.payload]
+      return {
+        ...state,
+        newTeamId: action.payload,
+      }
     case REMOVE_TEAM:
     case REMOVE_TEAM_FAILURE:
       return state
     case REMOVE_TEAM_SUCCESS: {
-      const newState = state.reduce((acc, team) => {
+      const newState = state.data.reduce<Team[]>((acc, team) => {
         if (!(team.id === action.id)) {
           acc.push(team)
         }
         return acc
-      }, [] as TeamsState)
+      }, [])
 
-      return newState
+      return { ...state, data: newState }
     }
     default:
       return state

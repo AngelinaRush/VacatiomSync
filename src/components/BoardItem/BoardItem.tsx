@@ -1,40 +1,43 @@
-import cn from 'classname'
-import React from 'react'
+import cn from 'classnames'
+import React, { Dispatch } from 'react'
 import { CloseButton } from 'react-bootstrap'
-import { connect } from 'react-redux'
+import { useDispatch } from 'react-redux'
 
 import styles from './BoardItem.module.css'
 
+import { useAuth } from '../../context/AuthContext'
 import { removeTeam } from '../../redux/teams/actions'
+import { Team } from '../../types'
 
 type BoardItemProps = {
   children: React.ReactNode
   className?: string
-  removeTeam?: (id: number) => void
-  id?: number
+  team?: Team
 }
 
-const BoardItem: React.FC<BoardItemProps> = ({ children, className = '', removeTeam, id }) => {
+const BoardItem: React.FC<BoardItemProps> = ({ children, className = '', team }) => {
+  const dispatch: Dispatch<any> = useDispatch()
+  const { currentUser } = useAuth()
+  const isResponsible = team && currentUser.uid === team?.responsible
+
   return (
     <div className={cn(styles.item, className)}>
       <div className={styles.title}>{children}</div>
-      {id && removeTeam && (
-        <CloseButton
-          variant='white'
-          onClick={(evt: any) => {
-            evt.preventDefault()
-            evt.stopPropagation()
-            removeTeam(id)
-          }}
-        />
+      {isResponsible && (
+        <div>
+          <button type='button' className={cn(styles.editButton, styles.button)} />
+          <CloseButton
+            variant='white'
+            onClick={(evt: any) => {
+              evt.preventDefault()
+              evt.stopPropagation()
+              removeTeam(team.id)(dispatch)
+            }}
+          />
+        </div>
       )}
     </div>
   )
 }
 
-const mapStateToProps = (state: any) => ({ teams: state.teams })
-const mapDispatchToProps = (dispatch: any) => ({
-  removeTeam: (id: number) => dispatch(removeTeam(id)),
-})
-
-export default connect(mapStateToProps, mapDispatchToProps)(BoardItem)
+export default BoardItem

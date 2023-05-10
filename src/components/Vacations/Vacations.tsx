@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 // @ts-ignore
 import Timeline from 'react-timelines'
 
@@ -8,74 +8,108 @@ import { buildTimebar } from './builders'
 
 import { START_YEAR, NUM_OF_YEARS } from './constants'
 
-import { MemberVacations } from '../../types'
+import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css'
+import 'react-calendar/dist/Calendar.css'
 
-const now = new Date('2023-05-03')
+import { Vacation, Team } from '../../types'
 
+const now = new Date()
 const timebar = buildTimebar()
 
 const MIN_ZOOM = 2
 const MAX_ZOOM = 20
 
 type VacationsProps = {
-  members?: string[] | null
-  vacations: MemberVacations[] | null
+  teams: Team[]
+  vacations: Vacation[]
 }
 
-const Vacations: React.FC<VacationsProps> = ({ members, vacations }) => {
-  if (!vacations) {
-    return <h3>Подождите идет загрузка</h3>
-  }
+type TimelineElement = {
+  id: number
+  title: string
+  start: Date
+  end: Date
+}
 
-  if (!vacations.length) {
-    return <h3>В данной команде еще не выбрали отпуска</h3>
-  }
+type Track = {
+  id: number
+  title: string
+  elenents: TimelineElement[]
+  isOpen: boolean
+  tracks: Track[]
+}
 
-  if (!members) {
-    return null
-  }
+const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
+  const [tracksById, setTracksById] = useState<Record<number, Track>>({})
 
-  const start = new Date(`${START_YEAR}`)
-  const end = new Date(`${START_YEAR + NUM_OF_YEARS}`)
+  useEffect(() => {
+    const newTracksById = teams.reduce((acc, team) => {
+      const teamVacations = vacations.filter((vacation: Vacation) => team.members?.includes(vacation.member))
 
-  const tracks = Object.values(
-    members.reduce((acc, member, index) => {
       const track = {
-        id: index,
-        title: member,
-        elements:
-          vacations[index].vacations?.map(({ id, start, end }) => ({
-            id,
-            title: 'Отпуск',
-            start: new Date(start),
-            end: new Date(end),
-          })) || [],
-        tracks: [],
+        id: team.id,
+        title: team.title,
+        elements: teamVacations.map(({ id, member, start, end }) => ({
+          id,
+          title: `Отпуск для ${member}`,
+          start: new Date(start),
+          end: new Date(end),
+        })),
+        isOpen: true,
+        tracks: team.members?.map((member) => {
+          const memberVacations = teamVacations.filter((vacation) => member === vacation.member)
+
+          return {
+            id: member,
+            title: member,
+            elements:
+              memberVacations?.map(({ id, start, end }) => ({
+                id,
+                title: 'Отпуск',
+                start: new Date(start),
+                end: new Date(end),
+              })) || [],
+            tracks: [],
+          }
+        }),
       }
       // @ts-ignore
       acc[track.id] = track
       return acc
-    }, {}),
-  )
+    }, {})
+
+    setTracksById(newTracksById)
+  }, [teams, vacations])
+
+  const start = new Date(`${START_YEAR}`)
+  const end = new Date(`${START_YEAR + NUM_OF_YEARS}`)
+
+  const handleToggleTrackOpen = (track: Track) => {
+    setTracksById({
+      ...tracksById,
+      [track.id]: {
+        ...track,
+        isOpen: !track.isOpen,
+      },
+    })
+  }
 
   return (
-    <React.Fragment>
-      <h3>Список участников с выбранными отпусками</h3>
-      <Timeline
-        scale={{
-          start,
-          end,
-          zoom: 10,
-          zoomMin: MIN_ZOOM,
-          zoomMax: MAX_ZOOM,
-        }}
-        timebar={timebar}
-        tracks={tracks}
-        now={now}
-        enableSticky
-        scrollToNow
-      />
-    </React.Fragment>
+    <Timeline
+      scale={{
+        start,
+        end,
+        zoom: 10,
+        zoomMin: MIN_ZOOM,
+        zoomMax: MAX_ZOOM,
+      }}
+      timebar={timebar}
+      tracks={Object.values(tracksById)}
+      toggleTrackOpen={handleToggleTrackOpen}
+      now={now}
+      enableSticky
+      scrollToNow
+    />
   )
 }
 

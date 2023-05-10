@@ -1,9 +1,12 @@
 import * as teamService from '../../services/teams'
-import { Team } from '../../types'
+import { NewTeam } from '../../types'
 
 export const LOAD_TEAMS = 'LOAD_TEAMS'
 export const LOAD_TEAMS_FAILURE = 'LOAD_TEAMS_FAILURE'
 export const LOAD_TEAMS_SUCCESS = 'LOAD_TEAMS_SUCCESS'
+// export const EDIT_TEAMS = 'EDIT_TEAMS'
+// export const EDIT_TEAMS_FAILURE = 'EDIT_TEAMS_FAILURE'
+// export const EDIT_TEAMS_SUCCESS = 'EDIT_TEAMS_SUCCESS'
 export const ADD_TEAM = 'ADD_TEAM'
 export const ADD_TEAM_SUCCESS = 'ADD_TEAM_SUCCESS'
 export const ADD_TEAM_FAILURE = 'ADD_TEAM_FAILURE'
@@ -24,7 +27,20 @@ export const loadTeamsSuccessAction = (payload: any) => ({
   payload,
 })
 
-export const addTeamSuccessAction = (payload: Team) => ({
+// export const editTeamsAction = () => ({
+//   type: EDIT_TEAMS,
+// })
+
+// export const editTeamsFailureAction = () => ({
+//   type: EDIT_TEAMS_FAILURE,
+// })
+
+// export const editTeamsSuccessAction = (payload: any) => ({
+//   type: EDIT_TEAMS_SUCCESS,
+//   payload,
+// })
+
+export const addTeamSuccessAction = (payload: string) => ({
   type: ADD_TEAM_SUCCESS,
   payload,
 })
@@ -33,7 +49,7 @@ export const addTeamFailureAction = () => ({
   type: ADD_TEAM_FAILURE,
 })
 
-export const removeTeamSuccessAction = (id: number) => ({
+export const removeTeamSuccessAction = (id: string) => ({
   type: REMOVE_TEAM_SUCCESS,
   id,
 })
@@ -42,7 +58,7 @@ export const removeTeamFailureAction = () => ({
   type: REMOVE_TEAM_FAILURE,
 })
 
-export const removeTeam = (id: number) => {
+export const removeTeam = (id: string) => {
   return (dispatch: any) => {
     teamService
       .removeTeam(id)
@@ -50,17 +66,17 @@ export const removeTeam = (id: number) => {
         dispatch(removeTeamSuccessAction(id))
       })
       .catch(() => {
-        removeTeamFailureAction()
+        dispatch(removeTeamFailureAction())
       })
   }
 }
 
-export const addTeam = (newTeam: Team) => {
+export const addTeam = (newTeam: NewTeam) => {
   return (dispatch: any) => {
     teamService
       .addTeam(newTeam)
-      .then(() => {
-        dispatch(addTeamSuccessAction(newTeam))
+      .then((teamId) => {
+        dispatch(addTeamSuccessAction(teamId as string))
       })
       .catch(() => {
         dispatch(addTeamFailureAction())
@@ -78,7 +94,7 @@ export const loadTeams = () => {
         dispatch(loadTeamsSuccessAction(data))
       })
       .catch(() => {
-        loadTeamsFailureAction()
+        dispatch(loadTeamsFailureAction())
       })
   }
 }
