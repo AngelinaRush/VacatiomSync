@@ -96,8 +96,6 @@ export const removeVacation = async (vacationId: string) => {
     const userId = user.uid
     const database = getDatabase()
     const vacationRef = ref(database, `vacations/${userId}/${vacationId}`)
-    // const vacationSnapshot = await get(vacationRef)
-    // const vacation = vacationSnapshot.val()
 
     await remove(vacationRef)
   } catch (error) {

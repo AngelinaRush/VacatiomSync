@@ -8,11 +8,14 @@ export function useAuth() {
 export function AuthProvider({ children }) {
   const [currentUser, setCurrentUser] = useState()
   const [loading, setLoading] = useState(true)
-  const signup = (email, password) => {
+  const signup = (email, password, fullName) => {
     let promise = new Promise(function (resolve, reject) {
       auth
         .createUserWithEmailAndPassword(email, password)
         .then((ref) => {
+          ref.user.updateProfile({
+            displayName: fullName,
+          })
           resolve(ref)
         })
         .catch((error) => reject(error))

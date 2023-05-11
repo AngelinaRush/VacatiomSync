@@ -31,10 +31,11 @@ export const joinTeam = async (teamId: string) => {
 
     const userId = user.uid
     const email = user.email?.replace('.', ',')
+    const displayName = user.displayName || userId
     const database = getDatabase()
 
     await Promise.all([
-      set(ref(database, `teams/${teamId}/members/${userId}`), true),
+      set(ref(database, `teams/${teamId}/members/${displayName}`), true),
       remove(ref(database, `teams/${teamId}/invites/${email}`)),
       set(ref(database, `user_teams/${userId}/${teamId}`), true),
     ])

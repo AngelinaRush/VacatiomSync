@@ -51,6 +51,7 @@ export const addTeam = async (newTeam: NewTeam) => {
     }
 
     const userId = user.uid
+    const displayName = user.displayName || userId
 
     const database = getDatabase()
 
@@ -67,7 +68,7 @@ export const addTeam = async (newTeam: NewTeam) => {
           acc[preparedEmail] = true
           return acc
         }, {}),
-        members: { [userId]: true },
+        members: { [displayName]: true },
         responsible: userId,
       }),
       set(ref(database, `user_teams/${userId}/${teamId}`), true),
