@@ -1,4 +1,5 @@
 import React, { Dispatch, useEffect } from 'react'
+import Spinner from 'react-bootstrap/Spinner'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavLink } from 'react-router-dom'
 
@@ -34,7 +35,11 @@ const Board: React.FC<BoardProps> = () => {
   }, [dispatch, team.hasInvite])
 
   if (teams.loading) {
-    return <h3>Подождите идет загрузка</h3>
+    return (
+      <div className={styles.load}>
+        <Spinner animation='border' variant='light' />
+      </div>
+    )
   }
 
   return (

@@ -3,6 +3,7 @@ import Button from 'react-bootstrap/Button'
 import { NavLink } from 'react-router-dom'
 
 import styles from './Header.module.css'
+import logo from './pic/logo.svg'
 
 import { useAuth } from '../../context/AuthContext'
 
@@ -13,6 +14,9 @@ const Header: React.FC = () => {
     <header className={styles.header}>
       <div className={styles.left}>
         <NavLink className={styles.logo} to={'/vacations'}>
+          <div className={styles.logoImg}>
+            <img src={logo} alt='логотип' />
+          </div>
           VacationSync
         </NavLink>
         <div className={styles.menu}>

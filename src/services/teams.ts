@@ -101,7 +101,7 @@ export const removeTeam = async (teamId: string) => {
 
     await remove(teamRef)
   } catch (error) {
-    console.error('Error joinind team:', error)
+    console.error('Error remove team:', error)
     throw error
   }
 }

@@ -13,4 +13,6 @@ export type NewTeam = {
 
 export type Vacation = { id: number; member: string; start: number; end: number }
 
+export type newVacation = { start: number; end: number }
+
 export type DateRangeValue = [Date | null, Date | null]

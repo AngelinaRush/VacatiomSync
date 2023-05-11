@@ -11,11 +11,14 @@ import { loadTeams } from '../redux/teams/actions'
 import { loadVacations } from '../redux/vacations/actions'
 import { addVacation } from '../redux/vacations/actions'
 
-import { Vacation, DateRangeValue } from '../types'
+import { newVacation, DateRangeValue } from '../types'
 
 type TeamsPageProps = {}
 
 const TeamsPage: React.FC<TeamsPageProps> = () => {
+  const { newVacationId } = useSelector((state: RootState) => state.vacations)
+  const { editedVacationId } = useSelector((state: RootState) => state.vacations)
+
   const teams = useSelector((state: RootState) => state.teams)
   const vacations = useSelector((state: RootState) => state.vacations)
   const dispatch: Dispatch<any> = useDispatch()
@@ -26,7 +29,7 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
 
   useEffect(() => {
     loadVacations(teams.data)(dispatch)
-  }, [dispatch, teams])
+  }, [dispatch, teams.data, newVacationId, editedVacationId])
 
   const [modalShow, setModalShow] = React.useState(false)
   const [dateRange, setDateRange] = React.useState<DateRangeValue>([null, null])
@@ -45,9 +48,7 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
         }}
         onSubmit={() => {
           const [start, end] = dateRange
-          const newVacation: Vacation = {
-            id: +new Date(),
-            member: 'Charlie@gmail.com',
+          const newVacation: newVacation = {
             start: +(start as Date),
             end: +(end as Date),
           }

@@ -12,12 +12,19 @@
 
 .logo {
   text-decoration: none;
+  display: flex;
+  align-items: center;
   color: white;
-  cursor: pointer;
+  cursor: pointer;  
 }
 
 .logo:hover {
   color: white;
+}
+
+.logoImg {
+  margin-right: 20px;
+  display: inline-block;
 }
 
 .menu {
@@ -32,4 +39,5 @@
 
 .left {
   display: flex;
+  align-items: center;
 }
