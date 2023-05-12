@@ -9,5 +9,13 @@
 }
 
 .title {
-  margin-bottom: 20px;
+  margin-bottom: 10px;
+}
+.wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.heading {
+  margin: 10px 0 15px 0;
 }

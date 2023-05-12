@@ -52,19 +52,21 @@ const TeamPage: React.FC<TeamsPageProps> = () => {
 
   return (
     <div className={styles.team}>
-      <h2 className={styles.title}>Список участников команды {team.data.title}</h2>
-      {hasInvite && <Button onClick={handleSubmit}>Вступить</Button>}
-      <h3>Участники</h3>
+      <div className={styles.wrapper}>
+        <h2 className={styles.title}>Список участников команды {team.data.title}</h2>
+        {hasInvite && <Button onClick={handleSubmit}>Вступить</Button>}
+      </div>
+      <h3 className={styles.heading}>Участники</h3>
       <ListGroup className='mb-3'>
-        {team.data.members?.map((member) => (
+        {team.data.members.map((member) => (
           <ListGroup.Item key={member.uid}>
             <div className={styles.listItem}>{member.displayName}</div>
           </ListGroup.Item>
         ))}
       </ListGroup>
-      <h3>Приглашённые</h3>
+      {!(team.data.invites.length === 0) && <h3 className={styles.heading}>Приглашённые</h3>}
       <ListGroup className='mb-3'>
-        {team.data.invites?.map((invite) => (
+        {team.data.invites.map((invite) => (
           <ListGroup.Item key={invite}>
             <div className={styles.listItem}>{invite}</div>
           </ListGroup.Item>

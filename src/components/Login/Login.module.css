@@ -1,7 +1,10 @@
+.title {
+  margin-top: 10px;
+}
+
 .login {
   display: flex;
   justify-content: center;
-  height: 100vh;
   margin-top: 100px;
 }
 
@@ -13,7 +16,7 @@ form {
   max-width: 500px;
 }
 
-label {
+.description {
   margin-bottom: 10px;
 }
 
@@ -30,4 +33,6 @@ label {
 .error {
   color: red;
   margin-top: 1rem;
+  display: flex;
+  justify-content: center;
 }

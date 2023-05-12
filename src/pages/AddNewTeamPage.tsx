@@ -101,10 +101,10 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
         aria-label='email'
         aria-describedby='email'
       />
-      <Form.Control.Feedback type='invalid'>Адрес электронной почты должен содержать символ '@'</Form.Control.Feedback>
       <Button type='button' onClick={handleAddInvite}>
         Добавить приглашение
       </Button>
+      <Form.Control.Feedback type='invalid'>Адрес электронной почты должен содержать символ '@'</Form.Control.Feedback>
     </InputGroup>
   )
 

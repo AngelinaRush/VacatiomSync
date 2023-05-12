@@ -5,12 +5,14 @@ import CloseButton from 'react-bootstrap/CloseButton'
 import Form from 'react-bootstrap/Form'
 import InputGroup from 'react-bootstrap/InputGroup'
 import ListGroup from 'react-bootstrap/ListGroup'
+import Spinner from 'react-bootstrap/Spinner'
 
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useParams } from 'react-router-dom'
 
 import styles from './EditTeamPage.module.css'
 
+import { useAuth } from '../context/AuthContext'
 import { RootState } from '../redux/rootReducer'
 import { loadTeam } from '../redux/team/actions'
 import { editTeam } from '../services/teams'
@@ -28,6 +30,9 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
   const [invites, setInvites] = useState<string[]>([])
   const [members, setMembers] = useState<Member[]>([])
   const dispatch: Dispatch<any> = useDispatch()
+  const { currentUser } = useAuth()
+  const isResponsible = team.data && currentUser.uid === team.data.responsible
+  const navigate = useNavigate()
 
   useEffect(() => {
     teamId && loadTeam(teamId)(dispatch)
@@ -41,12 +46,10 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
     }
   }, [dispatch, team.data])
 
-  const navigate = useNavigate()
-
   const handleSubmit = (evt: any) => {
     evt.preventDefault()
 
-    if (fieldIsEmpty(title) || fieldIsEmpty(invites)) {
+    if (fieldIsEmpty(title)) {
       setValidated(true)
       return
     }
@@ -107,7 +110,6 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
     <InputGroup className='mb-3'>
       <InputGroup.Text id='email'>E-mail</InputGroup.Text>
       <Form.Control
-        required
         type='email'
         placeholder='Электронная почта'
         value={email}
@@ -165,6 +167,18 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
       </ListGroup>
     </React.Fragment>
   )
+
+  if (team.loading) {
+    return <Spinner animation='border' variant='light' />
+  }
+
+  if (!team.data) {
+    return <div className={styles.form}>Команда удалена или не существует</div>
+  }
+
+  if (!isResponsible) {
+    navigate(`/team/${teamId}`)
+  }
 
   return (
     <Form className={styles.form} noValidate validated={validated} onSubmit={handleSubmit}>

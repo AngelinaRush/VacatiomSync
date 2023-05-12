@@ -93,9 +93,23 @@ export const editTeam = async (editedTeam: EditedTeam) => {
     }
 
     const database = getDatabase()
+
     const { title, invites, members, id: teamId } = editedTeam
 
+    const teamsRef = ref(database, `teams/${editedTeam.id}/members`)
+    const teamSnapshot = await get(teamsRef)
+    const prevMembers = teamSnapshot.val()
+    const prevMemberUids = Object.keys(prevMembers || {})
+
+    const memberUids = members.map((member) => member.uid)
+
+    const removedMembers = prevMemberUids.filter((uid: string) => !memberUids.includes(uid))
+
     await Promise.all([
+      ...removedMembers.map((uid: string) => {
+        const userTeamsRef = ref(database, `user_teams/${uid}/${editedTeam.id}`)
+        return remove(userTeamsRef)
+      }),
       set(ref(database, `teams/${teamId}/title`), title),
       set(
         ref(database, `teams/${teamId}/invites`),
