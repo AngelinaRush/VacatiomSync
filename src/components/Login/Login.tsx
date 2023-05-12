@@ -45,7 +45,7 @@ const Login: React.FC<LoginProps> = () => {
     signup(email, password, fullname)
       .then((ref: any) => {
         setLoading(false)
-        navigate('/vacations')
+        navigate('/teams')
       })
       .catch((err: any) => {
         setError(err.message)
