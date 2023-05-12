@@ -8,7 +8,7 @@ const TeamsPage: React.FC<NotFoundPageProps> = () => {
   return (
     <div className={styles.content}>
       <h2>Приветствуем!</h2>
-      <p>Для просмотра выберите команду слева</p>
+      <p>Для просмотра выберите команду слева или создайте команду</p>
     </div>
   )
 }

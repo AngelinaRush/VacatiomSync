@@ -1,8 +1,13 @@
+export type Member = {
+  uid: string
+  displayName: string
+}
+
 export type Team = {
   title: string
   id: string
   responsible: string
-  members: string[]
+  members: Member[]
   invites: string[]
 }
 
@@ -11,8 +16,15 @@ export type NewTeam = {
   invites: string[]
 }
 
-export type Vacation = { id: number; member: string; start: number; end: number }
+export type EditedTeam = {
+  title: string
+  id: string
+  invites: string[]
+  members: Member[]
+}
 
-export type newVacation = { start: number; end: number }
+export type Vacation = { id: number; member: Member; start: number; end: number }
+
+export type NewVacation = { start: number; end: number }
 
 export type DateRangeValue = [Date | null, Date | null]

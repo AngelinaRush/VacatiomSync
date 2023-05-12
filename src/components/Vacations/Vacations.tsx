@@ -9,11 +9,13 @@ import { buildTimebar } from './builders'
 
 import { START_YEAR, NUM_OF_YEARS } from './constants'
 
+import { useAuth } from '../../context/AuthContext'
+
 import '@wojtekmaj/react-daterange-picker/dist/DateRangePicker.css'
 import 'react-calendar/dist/Calendar.css'
 
 import { editVacation, removeVacation } from '../../redux/vacations/actions'
-import { Vacation, Team, DateRangeValue, newVacation } from '../../types'
+import { Vacation, Team, DateRangeValue, NewVacation } from '../../types'
 import VacationsModal from '../VacationModal/VacationModal'
 
 const now = new Date()
@@ -28,10 +30,11 @@ type VacationsProps = {
 }
 
 type TimelineElement = {
-  id: number
+  id: string
   title: string
   start: Date
   end: Date
+  uid: string
 }
 
 type Track = {
@@ -43,35 +46,40 @@ type Track = {
 }
 
 const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
+  const { currentUser } = useAuth()
   const [tracksById, setTracksById] = useState<Record<number, Track>>({})
   const [modalShow, setModalShow] = useState(false)
   const [dateRange, setDateRange] = useState<DateRangeValue>([null, null])
   const dispatch: Dispatch<any> = useDispatch()
-  const [ClickedId, setClickedId] = useState('')
+  const [clickedId, setClickedId] = useState('')
 
   useEffect(() => {
     const newTracksById = teams.reduce((acc, team) => {
-      const teamVacations = vacations.filter((vacation: Vacation) => team.members?.includes(vacation.member))
+      const teamVacations = vacations.filter((vacation: Vacation) => {
+        const uids = team.members.map((member) => member.uid)
+        return uids.includes(vacation.member.uid)
+      })
 
       const track = {
         id: team.id,
         title: team.title,
         elements: teamVacations.map(({ id, member, start, end }) => ({
           id,
-          title: `Отпуск для ${member}`,
+          title: `Отпуск для ${member.displayName}`,
           start: new Date(start),
           end: new Date(end),
         })),
         isOpen: true,
         tracks: team.members?.map((member) => {
-          const memberVacations = teamVacations.filter((vacation) => member === vacation.member)
+          const memberVacations = teamVacations.filter((vacation) => member.uid === vacation.member.uid)
 
           return {
-            id: member,
-            title: member,
+            id: member.uid,
+            title: member.displayName,
             elements:
-              memberVacations?.map(({ id, start, end }) => ({
+              memberVacations?.map(({ id, start, end, member }) => ({
                 id,
+                uid: member.uid,
                 title: 'Отпуск',
                 start: new Date(start),
                 end: new Date(end),
@@ -91,10 +99,12 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
   const start = new Date(`${START_YEAR}`)
   const end = new Date(`${START_YEAR + NUM_OF_YEARS}`)
 
-  const clickElement = (element: any) => {
-    setClickedId(element.id)
-    setDateRange([element.start, element.end])
-    setModalShow(true)
+  const clickElement = (element: TimelineElement) => {
+    if (element.uid === currentUser.uid) {
+      setClickedId(element.id)
+      setDateRange([element.start, element.end])
+      setModalShow(true)
+    }
   }
 
   const handleToggleTrackOpen = (track: Track) => {
@@ -133,17 +143,17 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
           setModalShow(false)
         }}
         onRemove={() => {
-          removeVacation(ClickedId)(dispatch)
+          removeVacation(clickedId)(dispatch)
           setModalShow(false)
           setClickedId('')
         }}
         onEdit={() => {
           const [start, end] = dateRange
-          const vacation: newVacation = {
+          const vacation: NewVacation = {
             start: +(start as Date),
             end: +(end as Date),
           }
-          editVacation(vacation, ClickedId)(dispatch)
+          editVacation(vacation, clickedId)(dispatch)
           setModalShow(false)
         }}
       />

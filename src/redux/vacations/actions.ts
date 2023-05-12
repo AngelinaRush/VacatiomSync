@@ -1,5 +1,5 @@
 import * as vacationService from '../../services/vacations'
-import { newVacation, Team } from '../../types'
+import { NewVacation, Team } from '../../types'
 
 export const LOAD_VACATIONS = 'LOAD_VACATIONS'
 export const LOAD_VACATIONS_FAILURE = 'LOAD_VACATIONS_FAILURE'
@@ -49,7 +49,7 @@ export const addVacationFailureAction = () => ({
   type: ADD_VACATION_FAILURE,
 })
 
-export const addVacation = (newVacation: newVacation) => {
+export const addVacation = (newVacation: NewVacation) => {
   return (dispatch: any) => {
     vacationService
       .addVacation(newVacation)
@@ -71,7 +71,7 @@ export const editVacationFailureAction = () => ({
   type: EDIT_VACATION_FAILURE,
 })
 
-export const editVacation = (vacation: newVacation, vacationId: string) => {
+export const editVacation = (vacation: NewVacation, vacationId: string) => {
   return (dispatch: any) => {
     vacationService
       .editVacation(vacation, vacationId)

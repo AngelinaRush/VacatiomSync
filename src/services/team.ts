@@ -10,7 +10,7 @@ export const getTeam = async (teamId: string) => {
 
     if (team) {
       team.id = teamId
-      team.members = Object.keys(team.members || {}).map((email) => email.replace(',', '.'))
+      team.members = Object.keys(team.members || {}).map((uid) => ({ uid, displayName: team.members[uid].displayName }))
       team.invites = Object.keys(team.invites || {}).map((email) => email.replace(',', '.'))
     }
 
@@ -35,7 +35,7 @@ export const joinTeam = async (teamId: string) => {
     const database = getDatabase()
 
     await Promise.all([
-      set(ref(database, `teams/${teamId}/members/${displayName}`), true),
+      set(ref(database, `teams/${teamId}/members/${userId}`), { displayName }),
       remove(ref(database, `teams/${teamId}/invites/${email}`)),
       set(ref(database, `user_teams/${userId}/${teamId}`), true),
     ])

@@ -54,10 +54,19 @@ const TeamPage: React.FC<TeamsPageProps> = () => {
     <div className={styles.team}>
       <h2 className={styles.title}>Список участников команды {team.data.title}</h2>
       {hasInvite && <Button onClick={handleSubmit}>Вступить</Button>}
+      <h3>Участники</h3>
       <ListGroup className='mb-3'>
         {team.data.members?.map((member) => (
-          <ListGroup.Item key={member}>
-            <div className={styles.listItem}>{member}</div>
+          <ListGroup.Item key={member.uid}>
+            <div className={styles.listItem}>{member.displayName}</div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+      <h3>Приглашённые</h3>
+      <ListGroup className='mb-3'>
+        {team.data.invites?.map((invite) => (
+          <ListGroup.Item key={invite}>
+            <div className={styles.listItem}>{invite}</div>
           </ListGroup.Item>
         ))}
       </ListGroup>

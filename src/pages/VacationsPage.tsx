@@ -1,5 +1,6 @@
 import React, { Dispatch, useEffect } from 'react'
 import Button from 'react-bootstrap/Button'
+import Spinner from 'react-bootstrap/Spinner'
 import { useSelector, useDispatch } from 'react-redux'
 
 import styles from './VacationsPage.module.css'
@@ -11,7 +12,7 @@ import { loadTeams } from '../redux/teams/actions'
 import { loadVacations } from '../redux/vacations/actions'
 import { addVacation } from '../redux/vacations/actions'
 
-import { newVacation, DateRangeValue } from '../types'
+import { NewVacation, DateRangeValue } from '../types'
 
 type TeamsPageProps = {}
 
@@ -34,6 +35,18 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
   const [modalShow, setModalShow] = React.useState(false)
   const [dateRange, setDateRange] = React.useState<DateRangeValue>([null, null])
 
+  const renderVacations = () => {
+    if (teams.loading || vacations.loading) {
+      return <Spinner animation='border' variant='light' />
+    }
+
+    if (!teams.data || !teams.data.length) {
+      return <h2>Вы не состоите ни в одной команде</h2>
+    }
+
+    return <Vacations teams={teams.data} vacations={vacations.data}></Vacations>
+  }
+
   return (
     <React.Fragment>
       <div className={styles.AddVacationButton}>
@@ -48,7 +61,7 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
         }}
         onSubmit={() => {
           const [start, end] = dateRange
-          const newVacation: newVacation = {
+          const newVacation: NewVacation = {
             start: +(start as Date),
             end: +(end as Date),
           }
@@ -57,11 +70,7 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
           setModalShow(false)
         }}
       />
-      <Vacations teams={teams.data} vacations={vacations.data}></Vacations>
-      {/* {teams.data.map((team) => {
-        const teamVacations = vacations.data.filter((vacation: Vacation) => team.members.includes(vacation.member))
-        return <Vacations team={team} vacations={teamVacations}></Vacations>
-      })} */}
+      {renderVacations()}
     </React.Fragment>
   )
 }

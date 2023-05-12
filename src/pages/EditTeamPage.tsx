@@ -7,32 +7,41 @@ import InputGroup from 'react-bootstrap/InputGroup'
 import ListGroup from 'react-bootstrap/ListGroup'
 
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
-import styles from './AddNewTeamPage.module.css'
+import styles from './EditTeamPage.module.css'
 
 import { RootState } from '../redux/rootReducer'
-import { addTeam } from '../redux/teams/actions'
+import { loadTeam } from '../redux/team/actions'
+import { editTeam } from '../services/teams'
+import { Member } from '../types'
 import { fieldIsEmpty, validateEmail } from '../utils/validators'
 
-type AddNewTeamPageProps = {}
+type EditPageProps = {}
 
-const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
-  const { newTeamId } = useSelector((state: RootState) => state.teams)
-
+const EditTeamPage: React.FC<EditPageProps> = () => {
+  const team = useSelector((state: RootState) => state.team)
+  const { teamId } = useParams()
+  const [validated, setValidated] = useState<boolean>(false)
   const [title, setTitle] = useState<string>('')
   const [email, setEmail] = useState<string>('')
   const [invites, setInvites] = useState<string[]>([])
-  const [validated, setValidated] = useState<boolean>(false)
-  const navigate = useNavigate()
-
+  const [members, setMembers] = useState<Member[]>([])
   const dispatch: Dispatch<any> = useDispatch()
 
   useEffect(() => {
-    if (newTeamId) {
-      navigate(`/team/${newTeamId}`)
+    teamId && loadTeam(teamId)(dispatch)
+  }, [dispatch, teamId])
+
+  useEffect(() => {
+    if (team.data) {
+      setTitle(team.data?.title)
+      setInvites(team.data?.invites)
+      setMembers(team.data?.members)
     }
-  }, [newTeamId, navigate])
+  }, [dispatch, team.data])
+
+  const navigate = useNavigate()
 
   const handleSubmit = (evt: any) => {
     evt.preventDefault()
@@ -42,15 +51,20 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
       return
     }
 
-    const newTeam = {
+    const editedTeam = {
       title: title,
       invites,
+      members,
+      id: teamId || '',
     }
 
-    addTeam(newTeam)(dispatch)
-    setTitle('')
-    setEmail('')
-    setInvites([])
+    editTeam(editedTeam)
+      .then(() => {
+        navigate(`/team/${teamId}`)
+      })
+      .catch((error) => {
+        console.error('Произошла ошибка при обновлении команды', error)
+      })
     setValidated(false)
   }
 
@@ -110,7 +124,7 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
 
   const renderInvitesList = () => (
     <React.Fragment>
-      <h3>Приглашенные</h3>
+      <h3>Приглашённые</h3>
       <ListGroup className='mb-3'>
         {invites.map((invite, index) => (
           <ListGroup.Item key={invite}>
@@ -130,17 +144,40 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
     </React.Fragment>
   )
 
+  const renderMembersList = () => (
+    <React.Fragment>
+      <h3>Участники</h3>
+      <ListGroup className='mb-3'>
+        {members.map((member, index) => (
+          <ListGroup.Item key={member.uid}>
+            <div className={styles.listItem}>
+              {member.displayName}
+              <CloseButton
+                onClick={() => {
+                  const newMembers = [...members]
+                  newMembers.splice(index, 1)
+                  setMembers(newMembers)
+                }}
+              />
+            </div>
+          </ListGroup.Item>
+        ))}
+      </ListGroup>
+    </React.Fragment>
+  )
+
   return (
     <Form className={styles.form} noValidate validated={validated} onSubmit={handleSubmit}>
-      <h2 className={styles.title}>Создание команды</h2>
+      <h2 className={styles.title}>Редактирование команды</h2>
       {renderTeamNameInput()}
       {renderEmailInput()}
       {renderInvitesList()}
+      {renderMembersList()}
       <Button type='submit' onClick={handleSubmit}>
-        Создать
+        Сохранить
       </Button>
     </Form>
   )
 }
 
-export default AddNewTeamPage
+export default EditTeamPage

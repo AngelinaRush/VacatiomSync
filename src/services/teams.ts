@@ -1,7 +1,7 @@
 import { getAuth } from 'firebase/auth'
 import { getDatabase, ref, get, set, push, remove } from 'firebase/database'
 
-import { Team, NewTeam } from '../types'
+import { Team, NewTeam, EditedTeam } from '../types'
 
 export const getTeams = async () => {
   try {
@@ -30,7 +30,10 @@ export const getTeams = async () => {
       const team = teamSnapshot.val()
       if (team) {
         team.id = teamId
-        team.members = Object.keys(team.members).map((email) => email.replace(',', '.'))
+        team.members = Object.keys(team.members || {}).map((uid) => ({
+          uid,
+          displayName: team.members[uid].displayName,
+        }))
         teams.push(team)
       }
     }
@@ -68,7 +71,7 @@ export const addTeam = async (newTeam: NewTeam) => {
           acc[preparedEmail] = true
           return acc
         }, {}),
-        members: { [displayName]: true },
+        members: { [userId]: { displayName } },
         responsible: userId,
       }),
       set(ref(database, `user_teams/${userId}/${teamId}`), true),
@@ -77,6 +80,41 @@ export const addTeam = async (newTeam: NewTeam) => {
     return teamId
   } catch (error) {
     console.error('Error addind team:', error)
+    throw error
+  }
+}
+
+export const editTeam = async (editedTeam: EditedTeam) => {
+  try {
+    const user = getAuth().currentUser
+
+    if (!user) {
+      throw new Error('No authenticated user')
+    }
+
+    const database = getDatabase()
+    const { title, invites, members, id: teamId } = editedTeam
+
+    await Promise.all([
+      set(ref(database, `teams/${teamId}/title`), title),
+      set(
+        ref(database, `teams/${teamId}/invites`),
+        invites.reduce<Record<string, boolean>>((acc, email) => {
+          const preparedEmail = email.replace('.', ',')
+          acc[preparedEmail] = true
+          return acc
+        }, {}),
+      ),
+      set(
+        ref(database, `teams/${teamId}/members`),
+        members.reduce<Record<string, { displayName: string }>>((acc, member) => {
+          acc[member.uid] = { displayName: member.displayName }
+          return acc
+        }, {}),
+      ),
+    ])
+  } catch (error) {
+    console.error('Error edited team:', error)
     throw error
   }
 }

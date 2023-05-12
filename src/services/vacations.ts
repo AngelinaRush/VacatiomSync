@@ -1,21 +1,22 @@
 import { getAuth } from 'firebase/auth'
 import { getDatabase, ref, get, set, push, remove } from 'firebase/database'
-import { uniq, flatten } from 'lodash'
+import { uniqBy, flatten } from 'lodash'
 
-import { newVacation, Team } from '../types'
+import { NewVacation, Team, Member } from '../types'
 
 export const getVacations = async (teams: Team[]) => {
-  const users = uniq(
-    teams.reduce<string[]>((acc, team) => {
+  const members = uniqBy(
+    teams.reduce<Member[]>((acc, team) => {
       return acc.concat(team.members)
     }, []),
+    (member) => member.uid,
   )
 
   const database = getDatabase()
 
   const vacations = await Promise.all(
-    users.map(async (user) => {
-      const vacationsRef = ref(database, `vacations/${user}`)
+    members.map(async (member) => {
+      const vacationsRef = ref(database, `vacations/${member.uid}`)
       const vacationsSnapsot = await get(vacationsRef)
       const userVacations = vacationsSnapsot.val()
 
@@ -25,7 +26,7 @@ export const getVacations = async (teams: Team[]) => {
 
       Object.keys(userVacations).forEach((vacationId) => {
         userVacations[vacationId].id = vacationId
-        userVacations[vacationId].member = user
+        userVacations[vacationId].member = member
       })
 
       return Object.values(userVacations)
@@ -35,7 +36,7 @@ export const getVacations = async (teams: Team[]) => {
   return flatten(vacations)
 }
 
-export const addVacation = async (newVacations: newVacation) => {
+export const addVacation = async (newVacations: NewVacation) => {
   try {
     const user = getAuth().currentUser
 
@@ -61,7 +62,7 @@ export const addVacation = async (newVacations: newVacation) => {
   }
 }
 
-export const editVacation = async (newVacations: newVacation, vacationId: string) => {
+export const editVacation = async (newVacation: NewVacation, vacationId: string) => {
   try {
     const user = getAuth().currentUser
 
@@ -72,15 +73,14 @@ export const editVacation = async (newVacations: newVacation, vacationId: string
     const userId = user.uid
     const database = getDatabase()
 
-    const { start, end } = newVacations
+    const { start, end } = newVacation
 
     await set(ref(database, `vacations/${userId}/${vacationId}`), {
       start,
       end,
     })
-    return newVacations
   } catch (error) {
-    console.error('Error addind vacation:', error)
+    console.error('Error edited vacation:', error)
     throw error
   }
 }

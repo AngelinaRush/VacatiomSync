@@ -2,6 +2,7 @@ import cn from 'classnames'
 import React, { Dispatch } from 'react'
 import { CloseButton } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 import styles from './BoardItem.module.css'
 
@@ -19,13 +20,22 @@ const BoardItem: React.FC<BoardItemProps> = ({ children, className = '', team })
   const dispatch: Dispatch<any> = useDispatch()
   const { currentUser } = useAuth()
   const isResponsible = team && currentUser.uid === team?.responsible
+  const navigate = useNavigate()
 
   return (
     <div className={cn(styles.item, className)}>
       <div className={styles.title}>{children}</div>
       {isResponsible && (
         <div>
-          <button type='button' className={cn(styles.editButton, styles.button)} />
+          <button
+            type='button'
+            className={cn(styles.editButton, styles.button)}
+            onClick={(evt: any) => {
+              evt.preventDefault()
+              evt.stopPropagation()
+              navigate(`/teams/edit_team/${team.id}`)
+            }}
+          />
           <CloseButton
             variant='white'
             onClick={(evt: any) => {

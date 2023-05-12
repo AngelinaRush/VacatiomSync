@@ -6,6 +6,7 @@ import { useAuth } from './context/AuthContext'
 
 import withMenuHOC from './hoc/withMenu'
 import AddNewTeamPage from './pages/AddNewTeamPage'
+import EditTeamPage from './pages/EditTeamPage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import TeamPage from './pages/TeamPage'
@@ -34,6 +35,10 @@ const App: React.FC<AppProps> = () => {
         <Route
           path='/teams/add_team'
           element={withHandleUser(withMenuHOC(<AddNewTeamPage />, { needBoard: true }))}
+        ></Route>
+        <Route
+          path='/teams/edit_team/:teamId'
+          element={withHandleUser(withMenuHOC(<EditTeamPage />, { needBoard: true }))}
         ></Route>
         <Route path='/*' element={<NotFoundPage />} />
       </Routes>
