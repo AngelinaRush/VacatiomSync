@@ -37,11 +37,9 @@ const TeamPage: React.FC<TeamsPageProps> = () => {
   if (team.loading) {
     return (
       <div className={styles.team}>
-        (
         <Spinner animation='border' role='status'>
           <span className='visually-hidden'>Loading...</span>
         </Spinner>
-        )
       </div>
     )
   }
