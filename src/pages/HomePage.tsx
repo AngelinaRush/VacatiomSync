@@ -1,3 +1,4 @@
+import cn from 'classnames'
 import React from 'react'
 
 import Button from 'react-bootstrap/Button'
@@ -28,7 +29,7 @@ const HomePage: React.FC<HomePageProps> = () => {
           Войти
         </Button>
       </header>
-      <div className={styles.wrapper}>
+      <div className={cn(styles.wrapper, styles.leadBlockWrapper)}>
         <div className={styles.leadBlockContent}>
           <div>
             <p className={styles.description}>
