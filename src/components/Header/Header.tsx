@@ -14,7 +14,7 @@ const Header: React.FC = () => {
   return (
     <header className={styles.header}>
       <div className={styles.left}>
-        <NavLink className={styles.logo} to={'/vacations'}>
+        <NavLink className={styles.logo} to={'/'}>
           <div className={styles.logoImg}>
             <Logo />
           </div>

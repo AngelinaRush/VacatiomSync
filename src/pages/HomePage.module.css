@@ -35,6 +35,7 @@
 
 .leadBlockContent {
   display: flex;
+  justify-content: space-between;
 }
 
 .footnote {
