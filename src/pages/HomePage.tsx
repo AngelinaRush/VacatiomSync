@@ -16,11 +16,21 @@ const HomePage: React.FC<HomePageProps> = () => {
   }
 
   return (
-    <div>
+    <React.Fragment>
+      <header className={styles.header}>
+        <div className={styles.left}>
+          <div className={styles.logoImg}>
+            <img src='/logo.svg' alt='логотип' />
+          </div>
+          <span className={styles.title}>VacationSync</span>
+        </div>
+        <Button size='sm' onClick={handleSignin}>
+          Войти
+        </Button>
+      </header>
       <div className={styles.wrapper}>
         <div className={styles.leadBlockContent}>
           <div>
-            <h1 className={styles.title}>VacationSync</h1>
             <p className={styles.description}>
               Путешествуйте по одному, работайте вместе! Отпускодновременно? Никогда!
             </p>
@@ -46,7 +56,7 @@ const HomePage: React.FC<HomePageProps> = () => {
           </div>
         </div>
       </div>
-    </div>
+    </React.Fragment>
   )
 }
 
