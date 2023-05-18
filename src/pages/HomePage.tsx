@@ -6,6 +6,8 @@ import { useNavigate } from 'react-router-dom'
 
 import styles from './HomePage.module.css'
 
+import { ReactComponent as Logo } from '../assets/logo.svg'
+
 type HomePageProps = {}
 
 const HomePage: React.FC<HomePageProps> = () => {
@@ -21,7 +23,7 @@ const HomePage: React.FC<HomePageProps> = () => {
       <header className={styles.header}>
         <div className={styles.left}>
           <div className={styles.logoImg}>
-            <img src='/logo.svg' alt='логотип' />
+            <Logo />
           </div>
           <span className={styles.title}>VacationSync</span>
         </div>
@@ -33,8 +35,10 @@ const HomePage: React.FC<HomePageProps> = () => {
         <div className={styles.leadBlockContent}>
           <div>
             <p className={styles.description}>
-              Путешествуйте по одному, работайте вместе! Отпускодновременно? Никогда!
+              Путешествуйте по одному, работайте вместе! <span className={styles.exception}>"Отпускодновременно"</span>?
+              Никогда!*
             </p>
+            <p className={styles.footnote}>*По согласованию</p>
             <Button className={styles.login} onClick={handleSignin}>
               Поехали!
             </Button>

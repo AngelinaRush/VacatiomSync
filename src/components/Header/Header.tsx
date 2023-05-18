@@ -4,6 +4,8 @@ import { NavLink } from 'react-router-dom'
 
 import styles from './Header.module.css'
 
+import { ReactComponent as Logo } from '../../assets/logo.svg'
+
 import { useAuth } from '../../context/AuthContext'
 
 const Header: React.FC = () => {
@@ -14,7 +16,7 @@ const Header: React.FC = () => {
       <div className={styles.left}>
         <NavLink className={styles.logo} to={'/vacations'}>
           <div className={styles.logoImg}>
-            <img src='/logo.svg' alt='логотип' />
+            <Logo />
           </div>
           VacationSync
         </NavLink>
