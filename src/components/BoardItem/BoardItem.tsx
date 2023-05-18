@@ -26,7 +26,7 @@ const BoardItem: React.FC<BoardItemProps> = ({ children, className = '', team })
     <div className={cn(styles.item, className)}>
       <div className={styles.title}>{children}</div>
       {isResponsible && (
-        <div>
+        <div className={styles.controls}>
           <button
             type='button'
             className={cn(styles.editButton, styles.button)}

@@ -2,9 +2,6 @@ import {
   LOAD_TEAMS,
   LOAD_TEAMS_FAILURE,
   LOAD_TEAMS_SUCCESS,
-  // EDIT_TEAMS,
-  // EDIT_TEAMS_FAILURE,
-  // EDIT_TEAMS_SUCCESS,
   ADD_TEAM,
   ADD_TEAM_FAILURE,
   ADD_TEAM_SUCCESS,
@@ -48,8 +45,6 @@ const teams = (state: TeamsState = defaultState, action: any) => {
         data: action.payload,
         error: '',
       }
-    // case EDIT_TEAMS:
-    //   return {}
     case ADD_TEAM:
     case ADD_TEAM_FAILURE:
       return state

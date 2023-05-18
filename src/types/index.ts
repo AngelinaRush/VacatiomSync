@@ -23,8 +23,8 @@ export type EditedTeam = {
   members: Member[]
 }
 
-export type Vacation = { id: number; member: Member; start: number; end: number }
+export type Vacation = { id: number; member: Member; start: number; end: number; color: string }
 
-export type NewVacation = { start: number; end: number }
+export type NewVacation = { start: number; end: number; color?: string }
 
 export type DateRangeValue = [Date | null, Date | null]

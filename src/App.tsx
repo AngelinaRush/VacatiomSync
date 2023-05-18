@@ -7,6 +7,7 @@ import { useAuth } from './context/AuthContext'
 import withMenuHOC from './hoc/withMenu'
 import AddNewTeamPage from './pages/AddNewTeamPage'
 import EditTeamPage from './pages/EditTeamPage'
+import HomePage from './pages/HomePage'
 import LoginPage from './pages/LoginPage'
 import NotFoundPage from './pages/NotFoundPage'
 import TeamPage from './pages/TeamPage'
@@ -26,7 +27,7 @@ const App: React.FC<AppProps> = () => {
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Navigate to='/vacations' replace />} />
+        <Route path='/' element={<HomePage />} />
         <Route path='/login' element={<LoginPage />} />
 
         <Route path='/vacations' element={withHandleUser(withMenuHOC(<VacationsPage />))} />

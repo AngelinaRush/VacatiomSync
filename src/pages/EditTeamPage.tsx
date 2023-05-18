@@ -94,6 +94,7 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
     <InputGroup className='mb-3'>
       <InputGroup.Text id='title'>Название команды</InputGroup.Text>
       <Form.Control
+        className={styles.input}
         required
         type='text'
         placeholder='Название команды'
@@ -110,6 +111,7 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
     <InputGroup className='mb-3'>
       <InputGroup.Text id='email'>E-mail</InputGroup.Text>
       <Form.Control
+        className={styles.input}
         type='email'
         placeholder='Электронная почта'
         value={email}
@@ -117,7 +119,9 @@ const EditTeamPage: React.FC<EditPageProps> = () => {
         aria-label='email'
         aria-describedby='email'
       />
-      <Form.Control.Feedback type='invalid'>Адрес электронной почты должен содержать символ '@'</Form.Control.Feedback>
+      <Form.Control.Feedback type='invalid'>
+        Введите корректный e-mail в формате example@domain.com
+      </Form.Control.Feedback>
       <Button type='button' onClick={handleAddInvite}>
         Добавить приглашение
       </Button>

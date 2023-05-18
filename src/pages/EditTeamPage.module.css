@@ -1,13 +1,17 @@
 .listItem {
-    display: flex;
-    justify-content: space-between;
-  }
-  
-  .title {
-    margin-bottom: 20px;
-  }
-  
-  .form {
-    margin-left: 400px;
-  }
-  
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  margin-bottom: 20px;
+}
+
+.form {
+  margin-left: 400px;
+}
+
+.form .input:focus {
+  border-color: #ced4da;
+  box-shadow: none;
+}

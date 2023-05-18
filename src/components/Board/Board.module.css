@@ -1,5 +1,5 @@
 .load {
-  width: 345px;
+  width: 230px;
   height: 100vh;
   display: flex;
   justify-content: center;
@@ -9,7 +9,7 @@
 
 
 .board {
-  width: 345px;
+  width: 230px;
   position: fixed;
   top: 64px;
   left: 0;
@@ -23,6 +23,7 @@
 
 .heading {
   padding: 20px;
+  font-size: 1.7rem;
 }
 
 .addTeam {

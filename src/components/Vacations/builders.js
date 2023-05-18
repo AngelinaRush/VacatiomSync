@@ -45,13 +45,13 @@ export const buildMonthCells = () => {
 export const buildTimebar = () => [
   {
     id: 'quarters',
-    title: 'Quarters',
+    title: 'Квартал',
     cells: buildQuarterCells(),
     style: {},
   },
   {
     id: 'months',
-    title: 'Months',
+    title: 'Месяц',
     cells: buildMonthCells(),
     useAsGrid: true,
     style: {},

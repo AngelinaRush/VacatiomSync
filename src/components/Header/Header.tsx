@@ -8,7 +8,7 @@ import logo from './pic/logo.svg'
 import { useAuth } from '../../context/AuthContext'
 
 const Header: React.FC = () => {
-  const { signout } = useAuth()
+  const { signout, currentUser } = useAuth()
 
   return (
     <header className={styles.header}>
@@ -28,9 +28,12 @@ const Header: React.FC = () => {
           </NavLink>
         </div>
       </div>
-      <Button size='sm' onClick={signout}>
-        Выйти
-      </Button>
+      <div>
+        <span className={styles.menuItem}>{currentUser.displayName}</span>
+        <Button size='sm' onClick={signout}>
+          Выйти
+        </Button>
+      </div>
     </header>
   )
 }

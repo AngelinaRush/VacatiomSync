@@ -52,7 +52,11 @@ const TeamPage: React.FC<TeamsPageProps> = () => {
     <div className={styles.team}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>Список участников команды {team.data.title}</h2>
-        {hasInvite && <Button onClick={handleSubmit}>Вступить</Button>}
+        {hasInvite && (
+          <Button className={styles.join} onClick={handleSubmit}>
+            Вступить
+          </Button>
+        )}
       </div>
       <h3 className={styles.heading}>Участники</h3>
       <ListGroup className='mb-3'>
@@ -62,7 +66,7 @@ const TeamPage: React.FC<TeamsPageProps> = () => {
           </ListGroup.Item>
         ))}
       </ListGroup>
-      {!(team.data.invites.length === 0) && <h3 className={styles.heading}>Приглашённые</h3>}
+      {!!team.data.invites.length && <h3 className={styles.heading}>Приглашённые</h3>}
       <ListGroup className='mb-3'>
         {team.data.invites.map((invite) => (
           <ListGroup.Item key={invite}>

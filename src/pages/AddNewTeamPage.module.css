@@ -10,3 +10,8 @@
 .form {
   margin-left: 400px;
 }
+
+.form .input:focus {
+  border-color: #ced4da;
+  box-shadow: none;
+}

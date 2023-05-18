@@ -26,7 +26,7 @@ export const joinTeam = async (teamId: string) => {
     const user = getAuth().currentUser
 
     if (!user) {
-      throw new Error('No authenticated user')
+      throw new Error('Пользователь не аутентифицирован')
     }
 
     const userId = user.uid
@@ -37,6 +37,7 @@ export const joinTeam = async (teamId: string) => {
     await Promise.all([
       set(ref(database, `teams/${teamId}/members/${userId}`), { displayName }),
       remove(ref(database, `teams/${teamId}/invites/${email}`)),
+      remove(ref(database, `user_invites/${email}/${teamId}`)),
       set(ref(database, `user_teams/${userId}/${teamId}`), true),
     ])
   } catch (error) {

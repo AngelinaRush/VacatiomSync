@@ -63,11 +63,16 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
       const track = {
         id: team.id,
         title: team.title,
-        elements: teamVacations.map(({ id, member, start, end }) => ({
+        elements: teamVacations.map(({ id, member, start, end, color }) => ({
           id,
-          title: `Отпуск для ${member.displayName}`,
+          title: `${member.displayName} в отпуске`,
           start: new Date(start),
           end: new Date(end),
+          style: {
+            backgroundColor: color,
+            borderRadius: '4px',
+            boxShadow: '1px 1px 0px rgba(0, 0, 0, 0.5)',
+          },
         })),
         isOpen: true,
         tracks: team.members?.map((member) => {
@@ -77,12 +82,17 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
             id: member.uid,
             title: member.displayName,
             elements:
-              memberVacations?.map(({ id, start, end, member }) => ({
+              memberVacations?.map(({ id, start, end, member, color }) => ({
                 id,
                 uid: member.uid,
                 title: 'Отпуск',
                 start: new Date(start),
                 end: new Date(end),
+                style: {
+                  backgroundColor: color,
+                  borderRadius: '4px',
+                  boxShadow: '1px 1px 0px rgba(0, 0, 0, 0.25)',
+                },
               })) || [],
             tracks: [],
           }
@@ -123,7 +133,7 @@ const Vacations: React.FC<VacationsProps> = ({ teams, vacations }) => {
         scale={{
           start,
           end,
-          zoom: 10,
+          zoom: 20,
           zoomMin: MIN_ZOOM,
           zoomMax: MAX_ZOOM,
         }}

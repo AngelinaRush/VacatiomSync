@@ -43,7 +43,7 @@ const VacationsModal: React.FC<VacationsModalProps> = (props) => {
         </div>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={onRemove}>Удалить отпуск</Button>
+        <Button onClick={onRemove}>Отменить отпуск</Button>
         <Button onClick={onEdit}>Сохранить изменения</Button>
       </Modal.Footer>
     </Modal>

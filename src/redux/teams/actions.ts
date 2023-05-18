@@ -4,9 +4,6 @@ import { NewTeam } from '../../types'
 export const LOAD_TEAMS = 'LOAD_TEAMS'
 export const LOAD_TEAMS_FAILURE = 'LOAD_TEAMS_FAILURE'
 export const LOAD_TEAMS_SUCCESS = 'LOAD_TEAMS_SUCCESS'
-// export const EDIT_TEAMS = 'EDIT_TEAMS'
-// export const EDIT_TEAMS_FAILURE = 'EDIT_TEAMS_FAILURE'
-// export const EDIT_TEAMS_SUCCESS = 'EDIT_TEAMS_SUCCESS'
 export const ADD_TEAM = 'ADD_TEAM'
 export const ADD_TEAM_SUCCESS = 'ADD_TEAM_SUCCESS'
 export const ADD_TEAM_FAILURE = 'ADD_TEAM_FAILURE'
@@ -26,19 +23,6 @@ export const loadTeamsSuccessAction = (payload: any) => ({
   type: LOAD_TEAMS_SUCCESS,
   payload,
 })
-
-// export const editTeamsAction = () => ({
-//   type: EDIT_TEAMS,
-// })
-
-// export const editTeamsFailureAction = () => ({
-//   type: EDIT_TEAMS_FAILURE,
-// })
-
-// export const editTeamsSuccessAction = (payload: any) => ({
-//   type: EDIT_TEAMS_SUCCESS,
-//   payload,
-// })
 
 export const addTeamSuccessAction = (payload: string) => ({
   type: ADD_TEAM_SUCCESS,

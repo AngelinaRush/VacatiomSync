@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import styles from './VacationsPage.module.css'
 
 import AddVacationsModal from '../components/AddVacationModal/AddVacationModal'
+import { nextColor } from '../components/Vacations/utils'
 import Vacations from '../components/Vacations/Vacations'
 import { RootState } from '../redux/rootReducer'
 import { loadTeams } from '../redux/teams/actions'
@@ -14,9 +15,9 @@ import { addVacation } from '../redux/vacations/actions'
 
 import { NewVacation, DateRangeValue } from '../types'
 
-type TeamsPageProps = {}
+type VacationsPageProps = {}
 
-const TeamsPage: React.FC<TeamsPageProps> = () => {
+const VacationsPage: React.FC<VacationsPageProps> = () => {
   const { newVacationId } = useSelector((state: RootState) => state.vacations)
   const { editedVacationId } = useSelector((state: RootState) => state.vacations)
 
@@ -54,7 +55,9 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
       </div>
       <AddVacationsModal
         dateRange={dateRange}
-        onChangeDateRange={setDateRange}
+        onChangeDateRange={(value) => {
+          setDateRange(value ? value : [null, null])
+        }}
         show={modalShow}
         onHide={() => {
           setModalShow(false)
@@ -64,6 +67,7 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
           const newVacation: NewVacation = {
             start: +(start as Date),
             end: +(end as Date),
+            color: `#${nextColor()}`,
           }
           addVacation(newVacation)(dispatch)
           setDateRange([null, null])
@@ -75,4 +79,4 @@ const TeamsPage: React.FC<TeamsPageProps> = () => {
   )
 }
 
-export default TeamsPage
+export default VacationsPage

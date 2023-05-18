@@ -2,9 +2,9 @@ import React from 'react'
 
 import styles from './TeamsPage.module.css'
 
-type NotFoundPageProps = {}
+type TeamsPageProps = {}
 
-const TeamsPage: React.FC<NotFoundPageProps> = () => {
+const TeamsPage: React.FC<TeamsPageProps> = () => {
   return (
     <div className={styles.content}>
       <h2>Приветствуем!</h2>

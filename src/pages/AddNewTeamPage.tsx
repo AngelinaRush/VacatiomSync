@@ -77,6 +77,7 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
     <InputGroup className='mb-3'>
       <InputGroup.Text id='title'>Название команды</InputGroup.Text>
       <Form.Control
+        className={styles.input}
         required
         type='text'
         placeholder='Название команды'
@@ -93,6 +94,7 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
     <InputGroup className='mb-3'>
       <InputGroup.Text id='email'>E-mail</InputGroup.Text>
       <Form.Control
+        className={styles.input}
         required
         type='email'
         placeholder='Электронная почта'
@@ -104,7 +106,9 @@ const AddNewTeamPage: React.FC<AddNewTeamPageProps> = () => {
       <Button type='button' onClick={handleAddInvite}>
         Добавить приглашение
       </Button>
-      <Form.Control.Feedback type='invalid'>Адрес электронной почты должен содержать символ '@'</Form.Control.Feedback>
+      <Form.Control.Feedback type='invalid'>
+        Введите корректный e-mail в формате example@domain.com
+      </Form.Control.Feedback>
     </InputGroup>
   )
 

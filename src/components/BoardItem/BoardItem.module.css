@@ -1,11 +1,15 @@
 .item {
-  height: 50px;
+  min-height: 50px;
   padding: 20px;
   border-bottom: 1px solid #303338;
   display: flex;
   justify-content: space-between;
   align-items: center;
   color: white;
+}
+
+.controls {
+  display: flex;
 }
 
 .button {
@@ -23,5 +27,5 @@
 }
 
 .editButton {
-  background-image: url("./pic/pencil.svg");
+  background-image: url('./pic/pencil.svg');
 }

@@ -36,12 +36,12 @@ export const getVacations = async (teams: Team[]) => {
   return flatten(vacations)
 }
 
-export const addVacation = async (newVacations: NewVacation) => {
+export const addVacation = async (newVacation: NewVacation) => {
   try {
     const user = getAuth().currentUser
 
     if (!user) {
-      throw new Error('No authenticated user')
+      throw new Error('Пользователь не аутентифицирован')
     }
 
     const userId = user.uid
@@ -49,11 +49,12 @@ export const addVacation = async (newVacations: NewVacation) => {
     const vacationRef = push(ref(database, `vacations/${userId}`))
     const vacationId = vacationRef.key
 
-    const { start, end } = newVacations
+    const { start, end, color } = newVacation
 
     await set(ref(database, `vacations/${userId}/${vacationId}`), {
       start,
       end,
+      color,
     })
     return vacationId
   } catch (error) {
@@ -67,7 +68,7 @@ export const editVacation = async (newVacation: NewVacation, vacationId: string)
     const user = getAuth().currentUser
 
     if (!user) {
-      throw new Error('No authenticated user')
+      throw new Error('Пользователь не аутентифицирован')
     }
 
     const userId = user.uid
@@ -75,10 +76,10 @@ export const editVacation = async (newVacation: NewVacation, vacationId: string)
 
     const { start, end } = newVacation
 
-    await set(ref(database, `vacations/${userId}/${vacationId}`), {
-      start,
-      end,
-    })
+    await Promise.all([
+      set(ref(database, `vacations/${userId}/${vacationId}/start`), start),
+      set(ref(database, `vacations/${userId}/${vacationId}/end`), end),
+    ])
   } catch (error) {
     console.error('Error edited vacation:', error)
     throw error
@@ -90,7 +91,7 @@ export const removeVacation = async (vacationId: string) => {
     const user = getAuth().currentUser
 
     if (!user) {
-      throw new Error('No authenticated user')
+      throw new Error('Пользователь не аутентифицирован')
     }
 
     const userId = user.uid

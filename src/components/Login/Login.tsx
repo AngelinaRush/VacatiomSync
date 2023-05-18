@@ -91,36 +91,63 @@ const Login: React.FC<LoginProps> = () => {
     setFullname(evt.target.value)
   }
 
+  const renderAuthError = () => {
+    const match = error.match(/\(([^)]+)\)/)
+    if (!match) {
+      return
+    }
+
+    const errorCode = match[1]
+    let preparedError = ''
+
+    switch (errorCode) {
+      case 'auth/user-not-found':
+        preparedError = 'Пользователь не найден'
+        break
+      case 'auth/wrong-password':
+        preparedError = 'Неверный пароль'
+        break
+      case 'auth/weak-password':
+        preparedError = 'Пароль должен содержать не менее 6 символов'
+        break
+      default:
+        preparedError = error
+        break
+    }
+
+    return <div className={styles.error}>{preparedError}</div>
+  }
+
   return (
-    <>
+    <div className={styles.wrapper}>
       <div className={styles.login}>
         <div className={styles.tabs}>
           <Tabs defaultActiveKey='signin'>
             <Tab eventKey='signin' title='Вход'>
-              <h2 className={styles.title}>Вход в VacationSync</h2>
               <div className={styles.description}>Введите почту и пароль, чтобы войти</div>
               <Form noValidate validated={validated}>
                 <InputGroup className='mb-3'>
-                  <InputGroup.Text id='email'>E-mail</InputGroup.Text>
+                  <InputGroup.Text id='email'>Почта</InputGroup.Text>
                   <Form.Control
+                    className={styles.input}
                     required
                     type='email'
-                    placeholder='Электронная почта'
+                    placeholder='example@domain.com'
                     value={email}
                     onChange={handleEmailChange}
                     aria-label='email'
                     aria-describedby='email'
                   />
                   <Form.Control.Feedback type='invalid'>
-                    Адрес электронной почты должен содержать символ '@'
+                    Введите корректный e-mail в формате example@domain.com
                   </Form.Control.Feedback>
                 </InputGroup>
                 <InputGroup className='mb-3'>
-                  <InputGroup.Text id='password'>Password</InputGroup.Text>
+                  <InputGroup.Text id='password'>Пароль</InputGroup.Text>
                   <Form.Control
+                    className={styles.input}
                     required
                     type='password'
-                    placeholder='Пароль'
                     value={password}
                     onChange={handlePasswordChange}
                     aria-label='password'
@@ -134,30 +161,31 @@ const Login: React.FC<LoginProps> = () => {
               </Form>
             </Tab>
             <Tab eventKey='signup' title='Регистрация'>
-              <h2 className={styles.title}>Регистрация в VacationSync</h2>
               <div className={styles.description}>Введите почту пароль, и полное имя чтобы зарегистрироваться</div>
               <Form noValidate validated={validated}>
                 <InputGroup className='mb-3'>
-                  <InputGroup.Text id='email'>E-mail</InputGroup.Text>
+                  <InputGroup.Text id='email'>Почта</InputGroup.Text>
                   <Form.Control
+                    className={styles.input}
                     required
                     type='email'
-                    placeholder='Электронная почта'
+                    placeholder='example@domain.com'
                     value={email}
                     onChange={handleEmailChange}
                     aria-label='email'
                     aria-describedby='email'
                   />
                   <Form.Control.Feedback type='invalid'>
-                    Адрес электронной почты должен содержать символ '@'
+                    Введите корректный e-mail в формате example@domain.com
                   </Form.Control.Feedback>
                 </InputGroup>
                 <InputGroup className='mb-3'>
-                  <InputGroup.Text id='fullname'>Full name</InputGroup.Text>
+                  <InputGroup.Text id='fullname'>ФИО</InputGroup.Text>
                   <Form.Control
+                    className={styles.input}
                     required
                     type='text'
-                    placeholder='Фимилия Имя'
+                    placeholder='Иванов Иван Иванович'
                     value={fullname}
                     onChange={handleFullnameChange}
                     aria-label='fullname'
@@ -165,11 +193,11 @@ const Login: React.FC<LoginProps> = () => {
                   />
                 </InputGroup>
                 <InputGroup className='mb-3'>
-                  <InputGroup.Text id='password'>Password</InputGroup.Text>
+                  <InputGroup.Text id='password'>Пароль</InputGroup.Text>
                   <Form.Control
+                    className={styles.input}
                     required
                     type='password'
-                    placeholder='Пароль'
                     value={password}
                     onChange={handlePasswordChange}
                     aria-label='password'
@@ -185,8 +213,8 @@ const Login: React.FC<LoginProps> = () => {
           </Tabs>
         </div>
       </div>
-      {error && <div className={styles.error}>{error}</div>}
-    </>
+      {error && renderAuthError()}
+    </div>
   )
 }
 

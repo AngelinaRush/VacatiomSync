@@ -1,15 +1,21 @@
-.title {
-  margin-top: 10px;
+.wrapper {
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 25vh;
 }
 
 .login {
   display: flex;
   justify-content: center;
-  margin-top: 100px;
 }
 
 .tabs {
   width: 450px;
+}
+
+.wrapper .input:focus {
+  border-color: #ced4da;
+  box-shadow: none;
 }
 
 form {
@@ -17,6 +23,7 @@ form {
 }
 
 .description {
+  margin-top: 10px;
   margin-bottom: 10px;
 }
 

@@ -1,6 +1,6 @@
 .team {
-  margin-left: 400px;
-  max-width: 700px;
+  margin-left: 300px;
+  max-width: 800px;
 }
 
 .listItem {
@@ -10,10 +10,16 @@
 
 .title {
   margin-bottom: 10px;
+  size: 1.7rem;
 }
+
 .wrapper {
   display: flex;
   justify-content: space-between;
+}
+
+.join {
+  max-height: 40px;
 }
 
 .heading {

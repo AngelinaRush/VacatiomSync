@@ -1,0 +1,41 @@
+.wrapper {
+  margin: 80px auto 0 auto;
+  width: 1024px;
+}
+
+.leadBlockContent {
+  display: flex;
+}
+
+.stepsBlockContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.title {
+  margin-bottom: 20px;
+  display: block;
+  line-height: 52px;
+  font-size: 48px;
+}
+
+.description {
+  margin-bottom: 15px;
+  font-size: 30px;
+  line-height: 37px;
+  max-width: 500px;
+}
+
+.login {
+  margin-top: 15px;
+}
+
+.vacationPic {
+  max-width: 350px;
+}
+
+.stepsContent {
+  font-size: 20px;
+  line-height: 35px;
+  margin-top: 20px;
+}
