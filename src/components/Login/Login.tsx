@@ -8,6 +8,8 @@ import { useNavigate } from 'react-router-dom'
 
 import styles from './Login.module.css'
 
+import { ReactComponent as Logo } from '../../assets/logo.svg'
+
 import { useAuth } from '../../context/AuthContext'
 
 import { fieldIsEmpty, validateEmail } from '../../utils/validators'
@@ -121,96 +123,112 @@ const Login: React.FC<LoginProps> = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.login}>
-        <div className={styles.tabs}>
-          <Tabs defaultActiveKey='signin'>
-            <Tab eventKey='signin' title='Вход'>
-              <div className={styles.description}>Введите почту и пароль, чтобы войти</div>
-              <Form noValidate validated={validated}>
-                <InputGroup className='mb-3'>
-                  <InputGroup.Text id='email'>Почта</InputGroup.Text>
-                  <Form.Control
-                    className={styles.input}
-                    required
-                    type='email'
-                    placeholder='example@domain.com'
-                    value={email}
-                    onChange={handleEmailChange}
-                    aria-label='email'
-                    aria-describedby='email'
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    Введите корректный e-mail в формате example@domain.com
-                  </Form.Control.Feedback>
-                </InputGroup>
-                <InputGroup className='mb-3'>
-                  <InputGroup.Text id='password'>Пароль</InputGroup.Text>
-                  <Form.Control
-                    className={styles.input}
-                    required
-                    type='password'
-                    value={password}
-                    onChange={handlePasswordChange}
-                    aria-label='password'
-                    aria-describedby='password'
-                  />
-                  <Form.Control.Feedback type='invalid'>Введите пароль</Form.Control.Feedback>
-                </InputGroup>
-                <Button disabled={loading} onClick={handleSignin}>
-                  Войти
-                </Button>
-              </Form>
-            </Tab>
-            <Tab eventKey='signup' title='Регистрация'>
-              <div className={styles.description}>Введите почту пароль, и полное имя чтобы зарегистрироваться</div>
-              <Form noValidate validated={validated}>
-                <InputGroup className='mb-3'>
-                  <InputGroup.Text id='email'>Почта</InputGroup.Text>
-                  <Form.Control
-                    className={styles.input}
-                    required
-                    type='email'
-                    placeholder='example@domain.com'
-                    value={email}
-                    onChange={handleEmailChange}
-                    aria-label='email'
-                    aria-describedby='email'
-                  />
-                  <Form.Control.Feedback type='invalid'>
-                    Введите корректный e-mail в формате example@domain.com
-                  </Form.Control.Feedback>
-                </InputGroup>
-                <InputGroup className='mb-3'>
-                  <InputGroup.Text id='fullname'>ФИО</InputGroup.Text>
-                  <Form.Control
-                    className={styles.input}
-                    required
-                    type='text'
-                    placeholder='Иванов Иван Иванович'
-                    value={fullname}
-                    onChange={handleFullnameChange}
-                    aria-label='fullname'
-                    aria-describedby='fullname'
-                  />
-                </InputGroup>
-                <InputGroup className='mb-3'>
-                  <InputGroup.Text id='password'>Пароль</InputGroup.Text>
-                  <Form.Control
-                    className={styles.input}
-                    required
-                    type='password'
-                    value={password}
-                    onChange={handlePasswordChange}
-                    aria-label='password'
-                    aria-describedby='password'
-                  />
-                  <Form.Control.Feedback type='invalid'>Введите пароль</Form.Control.Feedback>
-                </InputGroup>
-                <Button disabled={loading} onClick={handleSignup}>
-                  Зарегистрироваться
-                </Button>
-              </Form>
-            </Tab>
-          </Tabs>
+        <div>
+          <div className={styles.logo}>
+            <Logo className={styles.logoImg} />
+            <div className={styles.logoText}>VacationSync</div>
+          </div>
+          <div className={styles.tabs}>
+            <Tabs defaultActiveKey='signin'>
+              <Tab eventKey='signin' title='Вход'>
+                <div className={styles.description}>Введите почту и пароль, чтобы войти</div>
+                <Form noValidate validated={validated}>
+                  <InputGroup className='mb-3'>
+                    <InputGroup.Text className={styles.label} id='email'>
+                      Почта
+                    </InputGroup.Text>
+                    <Form.Control
+                      className={styles.input}
+                      required
+                      type='email'
+                      placeholder='example@domain.com'
+                      value={email}
+                      onChange={handleEmailChange}
+                      aria-label='email'
+                      aria-describedby='email'
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      Введите корректный e-mail в формате example@domain.com
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <InputGroup className='mb-3'>
+                    <InputGroup.Text className={styles.label} id='password'>
+                      Пароль
+                    </InputGroup.Text>
+                    <Form.Control
+                      className={styles.input}
+                      required
+                      type='password'
+                      value={password}
+                      onChange={handlePasswordChange}
+                      aria-label='password'
+                      aria-describedby='password'
+                    />
+                    <Form.Control.Feedback type='invalid'>Введите пароль</Form.Control.Feedback>
+                  </InputGroup>
+                  <Button disabled={loading} onClick={handleSignin}>
+                    Войти
+                  </Button>
+                </Form>
+              </Tab>
+              <Tab eventKey='signup' title='Регистрация'>
+                <div className={styles.description}>Введите почту пароль, и полное имя чтобы зарегистрироваться</div>
+                <Form noValidate validated={validated}>
+                  <InputGroup className='mb-3'>
+                    <InputGroup.Text className={styles.label} id='email'>
+                      Почта
+                    </InputGroup.Text>
+                    <Form.Control
+                      className={styles.input}
+                      required
+                      type='email'
+                      placeholder='example@domain.com'
+                      value={email}
+                      onChange={handleEmailChange}
+                      aria-label='email'
+                      aria-describedby='email'
+                    />
+                    <Form.Control.Feedback type='invalid'>
+                      Введите корректный e-mail в формате example@domain.com
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                  <InputGroup className='mb-3'>
+                    <InputGroup.Text className={styles.label} id='fullname'>
+                      ФИО
+                    </InputGroup.Text>
+                    <Form.Control
+                      className={styles.input}
+                      required
+                      type='text'
+                      placeholder='Иванов Иван Иванович'
+                      value={fullname}
+                      onChange={handleFullnameChange}
+                      aria-label='fullname'
+                      aria-describedby='fullname'
+                    />
+                  </InputGroup>
+                  <InputGroup className='mb-3'>
+                    <InputGroup.Text className={styles.label} id='password'>
+                      Пароль
+                    </InputGroup.Text>
+                    <Form.Control
+                      className={styles.input}
+                      required
+                      type='password'
+                      value={password}
+                      onChange={handlePasswordChange}
+                      aria-label='password'
+                      aria-describedby='password'
+                    />
+                    <Form.Control.Feedback type='invalid'>Введите пароль</Form.Control.Feedback>
+                  </InputGroup>
+                  <Button disabled={loading} onClick={handleSignup}>
+                    Зарегистрироваться
+                  </Button>
+                </Form>
+              </Tab>
+            </Tabs>
+          </div>
         </div>
       </div>
       {error && renderAuthError()}

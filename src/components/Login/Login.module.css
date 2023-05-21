@@ -4,9 +4,27 @@
   margin-top: 25vh;
 }
 
+.logo {
+  margin-bottom: 40px;
+  display: flex;
+  align-items: center;
+}
+
+.logoImg {
+  width: 64px;
+  height: 64px;
+}
+
+.logoText {
+  display: inline-block;
+  margin-left: 20px;
+  font-size: 1.5em;
+}
+
 .login {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  align-items: center;
 }
 
 .tabs {
@@ -20,6 +38,10 @@
 
 form {
   max-width: 500px;
+}
+
+.label {
+  width: 80px;
 }
 
 .description {
