@@ -2,7 +2,8 @@
 
 ## Курсовой проект на курсе Tinkoff Fintech School, Frontend, весна 2022
 Выполнила Руш Ангелина Александровна 
-https://how-you-doing.vercel.app/
+ссылка:
+https://coursework-angelina-rush.vercel.app/
 
 ## Описание проекта
 Описание должно содержать:
